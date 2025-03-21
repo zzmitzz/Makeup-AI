@@ -1,6 +1,7 @@
 package com.example.mvi_base.core
 
 import androidx.lifecycle.ViewModel
+import com.iec.makeup.ui.MakeupAppState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,8 +12,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 
 abstract class BaseViewModel< State: Reducer.ViewState, Event: Reducer.ViewEvent, Effect: Reducer.ViewEffect>(
     initialState: State,
-    private val reducer: Reducer<State, Event, Effect>
+    private val reducer: Reducer<State, Event, Effect>,
 ): ViewModel() {
+
 
 
     private val _state: MutableStateFlow<State> = MutableStateFlow(initialState)

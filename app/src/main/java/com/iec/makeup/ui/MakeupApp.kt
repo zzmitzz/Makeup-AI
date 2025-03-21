@@ -10,5 +10,5 @@ fun MakeupApp(
     navController: NavController,
     appState: MakeupAppState
 ) {
-
+    
 }
