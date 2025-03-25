@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("org.jetbrains.kotlin.plugin.serialization")// Same version as Kotlin
 }
 kapt {
     correctErrorTypes = true
@@ -74,7 +75,6 @@ dependencies {
     kapt(libs.hilt.android.compiler)
     // Hilt for dependency injection in Compose
     implementation(libs.androidx.hilt.navigation.compose)
-
     // Navigation Compose for Jetpack Compose navigation
     implementation(libs.androidx.navigation.compose)
 
@@ -82,14 +82,15 @@ dependencies {
     implementation(libs.retrofit)
 
     // Gson converter for Retrofit
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation(libs.converter.gson)
 
     // OkHttp logging interceptor for debugging network requests
     implementation(libs.logging.interceptor)
-
+    implementation("kotlinx.serialization.json:1.4.1")
+implementation(libs.kotlinx.serialization.json)
     // Room for database operations
     implementation(libs.androidx.room.runtime)
 
     // Room annotation processor
-    kapt("androidx.room:room-compiler:2.6.1")
+    kapt(libs.androidx.room.compiler)
 }

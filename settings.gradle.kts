@@ -21,7 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Makeup-AI"
 include(":app")
-include(":data")
-include(":local_preference")
-include(":persistent_state")
-include(":persistentstate")

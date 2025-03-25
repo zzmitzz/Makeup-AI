@@ -1,4 +1,4 @@
-package com.example.mvi_base.core
+package com.iec.makeup.core
 
 import androidx.lifecycle.ViewModel
 import com.iec.makeup.ui.MakeupAppState

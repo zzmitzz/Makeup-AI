@@ -1,4 +1,4 @@
-package com.iec.persistent_state
+package com.iec.makeup.core
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -35,14 +35,14 @@ interface DataStoreInterface {
 
 
 
-class PersistentState(private var context: Context) : DataStoreInterface {
+class PersistentState(private var context: Context) : com.iec.makeup.base.DataStoreInterface {
     companion object {
         @SuppressLint("StaticFieldLeak")
-        private var INSTANCE: PersistentState? = null
-        fun getInstance(context: Context): PersistentState {
-            return INSTANCE ?: synchronized(this) {
-                val instance = PersistentState(context)
-                INSTANCE = instance
+        private var INSTANCE: com.iec.makeup.base.PersistentState? = null
+        fun getInstance(context: Context): com.iec.makeup.base.PersistentState {
+            return com.iec.makeup.base.PersistentState.Companion.INSTANCE ?: synchronized(this) {
+                val instance = com.iec.makeup.base.PersistentState(context)
+                com.iec.makeup.base.PersistentState.Companion.INSTANCE = instance
                 instance
             }
         }

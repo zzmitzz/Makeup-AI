@@ -3,8 +3,21 @@ package com.iec.makeup.ui.navigation
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.iec.makeup.R
+import kotlin.reflect.KClass
 
-enum class ScreenDestination(
+/**
+ * Type for the top level destinations in the application. Contains metadata about the destination
+ * that is used in the top app bar and common navigation UI.
+ *
+ * @param selectedIcon The icon to be displayed in the navigation UI when this destination is
+ * selected.
+ * @param unselectedIcon The icon to be displayed in the navigation UI when this destination is
+ * not selected.
+ * @param iconTextId Text that to be displayed in the navigation UI.
+ * @param titleTextId Text that is displayed on the top app bar.
+ * @param route The route to use when navigating to this destination.
+ */
+enum class TopLevelDestination(
     val selectedIcon: Int,
     val unSelectedIcon: Int,
     @StringRes val iconText: Int,
@@ -40,4 +53,36 @@ enum class ScreenDestination(
         route = Routes.Page4.createRoute()
     )
 
+}
+
+
+sealed class Routes(
+    route: String
+) {
+    // Authorise Routes
+    data object Login : Routes("login") {
+        fun createRoute() = "login"
+    }
+    data object Register : Routes("register") {
+        fun createRoute() = "register"
+    }
+
+    // Home routes
+    data object Page1 : Routes("page1") {
+        fun createRoute() = "page1"
+    }
+    data object Page2 : Routes("page2") {
+        fun createRoute() = "page2"
+    }
+    data object Page3 : Routes("page3") {
+        fun createRoute() = "page3"
+    }
+    data object Page4 : Routes("page4") {
+        fun createRoute() = "page4"
+    }
+
+
+    companion object {
+//        const val
+    }
 }
