@@ -3,14 +3,15 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
-    id("org.jetbrains.kotlin.plugin.serialization")// Same version as Kotlin
+    kotlin("plugin.serialization") version "1.9.0"
 }
+
 kapt {
     correctErrorTypes = true
 }
 android {
     namespace = "com.iec.makeup"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.iec.makeup"
@@ -45,7 +46,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.7"
     }
     packaging {
         resources {
@@ -56,6 +57,7 @@ android {
 
 dependencies {
 
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -64,6 +66,18 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.play.services.location)
+    implementation(libs.play.services.mlkit.document.scanner)
+    implementation(libs.firebase.messaging.ktx)
+    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.coordinatorlayout)
+    implementation(libs.androidx.cardview)
+    implementation(libs.play.services.vision.common)
+    implementation(libs.androidx.paging.common.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -73,24 +87,54 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
-    // Hilt for dependency injection in Compose
-    implementation(libs.androidx.hilt.navigation.compose)
-    // Navigation Compose for Jetpack Compose navigation
-    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.core)
+    implementation(libs.androidx.constraintlayout.compose.android)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.accompanist.permissions)
+    // Use this for both Android and JVM
+    implementation(libs.qrcode.kotlin)
+// Hilt for ViewModel
+    implementation("androidx.fragment:fragment-ktx:1.6.1")
+    // Lifecycle ViewModel
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    // Retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
 
-    // Retrofit for network requests
-    implementation(libs.retrofit)
+    // Hilt
+    implementation ("com.google.dagger:hilt-android:2.50")
+    kapt ("com.google.dagger:hilt-compiler:2.50")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
-    // Gson converter for Retrofit
-    implementation(libs.converter.gson)
+    implementation("com.pusher:pusher-java-client:2.4.2")
 
-    // OkHttp logging interceptor for debugging network requests
+    // Ktor
+    val ktor_version = "2.3.12"
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation("io.ktor:ktor-client-websockets:$ktor_version")
+    implementation(libs.ktor.client.logging)
+
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
-    implementation("kotlinx.serialization.json:1.4.1")
-implementation(libs.kotlinx.serialization.json)
-    // Room for database operations
-    implementation(libs.androidx.room.runtime)
 
+    // Datastore
+    implementation("androidx.datastore:datastore-preferences:1.1.4")
+
+    //Biometric
+    implementation(libs.androidx.biometric)
+
+    // Coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
+    implementation("androidx.compose.material:material:1.7.8")
+
+    // Gemini SDK
+    implementation(libs.generativeai)
     // Room annotation processor
-    kapt(libs.androidx.room.compiler)
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
 }

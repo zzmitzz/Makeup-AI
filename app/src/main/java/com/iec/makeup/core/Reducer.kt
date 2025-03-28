@@ -2,7 +2,7 @@ package com.iec.makeup.core
 
 
 
-interface Reducer<State: com.iec.makeup.core.Reducer.ViewState, Event: _root_ide_package_.com.iec.makeup.core.Reducer.ViewEvent, Effect: _root_ide_package_.com.iec.makeup.core.Reducer.ViewEffect> {
+interface Reducer<State: Reducer.ViewState, Event: Reducer.ViewEvent, Effect: Reducer.ViewEffect> {
     /*
     - This viewState representation for state of the UI, contains all the compose need to display
      */

@@ -31,7 +31,7 @@ abstract class BaseViewModel< State: Reducer.ViewState, Event: Reducer.ViewEvent
         _state.tryEmit(initialState)
     }
 
-    fun sendEffect(effect: Effect) {
+    private fun sendEffect(effect: Effect) {
         _effect.trySend(effect)
     }
 

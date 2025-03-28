@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
+import javax.inject.Singleton
 
 
 @Composable
@@ -21,9 +22,9 @@ fun rememberMakeupAppState(
 }
 
 
-@Stable
+@Singleton
 class MakeupAppState @Inject constructor(
-    navController: NavController,
+    private val navController: NavController,
 ){
     // Just store the current state of the whole application
     val isInternetConnected by mutableStateOf(checkIfConnected())

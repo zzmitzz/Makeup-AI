@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.iec.makeup.ui.MakeupAppState
+import com.iec.makeup.ui.features.authentication.login.LoginScreen
 
 
 @Composable
@@ -21,11 +22,12 @@ fun NavigationGraph(
             route = "auth"
         ){
             composable(route = Routes.Login.createRoute()) {
-//                LoginScreen(navController = navController)
+                LoginScreen()
             }
             composable(route = Routes.Register.createRoute()) {
 //                RegisterScreen(navController = navController)
             }
+
         }
     }
 }
