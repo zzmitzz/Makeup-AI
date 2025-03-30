@@ -71,7 +71,7 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.play.services.mlkit.document.scanner)
     implementation(libs.firebase.messaging.ktx)
-    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+    implementation(libs.androidx.constraintlayout.v221)
     implementation(libs.androidx.swiperefreshlayout)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.coordinatorlayout)
@@ -96,25 +96,25 @@ dependencies {
     // Use this for both Android and JVM
     implementation(libs.qrcode.kotlin)
 // Hilt for ViewModel
-    implementation("androidx.fragment:fragment-ktx:1.6.1")
+    implementation(libs.androidx.fragment.ktx)
     // Lifecycle ViewModel
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation (libs.androidx.lifecycle.viewmodel.ktx.v261)
     // Retrofit
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation (libs.retrofit.v290)
+    implementation (libs.converter.gson.v290)
 
     // Hilt
-    implementation ("com.google.dagger:hilt-android:2.50")
-    kapt ("com.google.dagger:hilt-compiler:2.50")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation (libs.hilt.android.v250)
+    kapt (libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
-    implementation("com.pusher:pusher-java-client:2.4.2")
+    implementation(libs.pusher.java.client)
 
-    // Ktor
-    val ktor_version = "2.3.12"
+
+    // Ktor, later implement for web-sockets
     implementation(libs.ktor.client.core)
     implementation(libs.ktor.client.cio)
-    implementation("io.ktor:ktor-client-websockets:$ktor_version")
+    implementation(libs.ktor.client.websockets)
     implementation(libs.ktor.client.logging)
 
     implementation(libs.kotlinx.serialization.json)
@@ -122,7 +122,7 @@ dependencies {
     implementation(libs.logging.interceptor)
 
     // Datastore
-    implementation("androidx.datastore:datastore-preferences:1.1.4")
+    implementation(libs.androidx.datastore.preferences)
 
     //Biometric
     implementation(libs.androidx.biometric)
@@ -131,10 +131,20 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
-    implementation("androidx.compose.material:material:1.7.8")
+    implementation(libs.androidx.material)
 
     // Gemini SDK
     implementation(libs.generativeai)
     // Room annotation processor
-    implementation("androidx.compose.material:material-icons-extended:1.7.8")
+    implementation(libs.androidx.material.icons.extended)
+
+    // Retrofit
+    implementation(libs.retrofit2.retrofit)
+    implementation(libs.retrofit2.converter.gson)
+    // OkHttp (recommended)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+    // If using Kotlin Serialization, add the plugin
+    implementation(libs.kotlinx.serialization.json)
 }

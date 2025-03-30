@@ -10,11 +10,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 
 
-abstract class BaseViewModel< State: Reducer.ViewState, Event: Reducer.ViewEvent, Effect: Reducer.ViewEffect>(
+abstract class BaseViewModel<State : Reducer.ViewState, Event : Reducer.ViewEvent, Effect : Reducer.ViewEffect>(
     initialState: State,
     private val reducer: Reducer<State, Event, Effect>,
-): ViewModel() {
-
+) : ViewModel() {
 
 
     private val _state: MutableStateFlow<State> = MutableStateFlow(initialState)
@@ -43,14 +42,16 @@ abstract class BaseViewModel< State: Reducer.ViewState, Event: Reducer.ViewEvent
         _state.tryEmit(newState)
     }
 
-    fun sendEventWithEffect(event: Event){
+    fun sendEventWithEffect(event: Event) {
         val (newState, effect) = reducer.reduce(_state.value, event)
 
         val success = _state.tryEmit(newState)
-        if(success){
+        if (success) {
             effect?.let {
                 sendEffect(it)
             }
         }
     }
+
+
 }

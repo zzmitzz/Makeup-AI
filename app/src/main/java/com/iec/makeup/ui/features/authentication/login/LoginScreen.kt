@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.iec.makeup.core.ui.AtomicLoadingDialog
+import com.iec.makeup.core.ui.DialogCompose
 import com.iec.makeup.core.utils.validatesEmailPattern
 import qrcode.color.Colors
 
@@ -75,7 +76,8 @@ fun LoginScreen() {
             effect = effect.value,
             doLogin = { viewModel.doLogin() },
             inputUserName = { viewModel.inputUsername(it) },
-            inputPassword = { viewModel.inputPassword(it) }
+            inputPassword = { viewModel.inputPassword(it) },
+            errorDismiss = { viewModel.errorDismiss() },
         )
     }
 }
@@ -87,12 +89,14 @@ fun LoginScreenStateful(
     doLogin: () -> Unit = {},
     inputUserName: (String) -> Unit = {},
     inputPassword: (String) -> Unit = {},
+    errorDismiss: () -> Unit = {},
 ) {
     var isPasswordVisible by remember { mutableStateOf(true) }
     var isEmailError by remember { mutableStateOf<String?>(null) }
+    var isError by remember { mutableStateOf<String?>(null) }
     LaunchedEffect(key1 = effect) {
-        if (effect != null) {
-            // Navigate action
+        if (effect != null && effect is LoginScreenEffect.showError) {
+            isError = effect.message
         }
     }
     Box(
@@ -299,6 +303,12 @@ fun LoginScreenStateful(
             ) {
                 AtomicLoadingDialog()
             }
+        }
+        if(isError != null){
+            DialogCompose(
+                text = isError!!,
+                onCloseAction = { errorDismiss() },
+            )
         }
     }
 }
