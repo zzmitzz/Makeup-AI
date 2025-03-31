@@ -6,6 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.navigation.NavController
+import com.iec.makeup.ui.navigation.TopLevelDestination
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
@@ -26,12 +27,27 @@ fun rememberMakeupAppState(
 class MakeupAppState @Inject constructor(
     private val navController: NavController,
 ){
-    // Just store the current state of the whole application
-    val isInternetConnected by mutableStateOf(checkIfConnected())
+
     private var _isAuthenticated = MutableStateFlow(false)
     val isAuth get() = _isAuthenticated.asStateFlow()
+
+    private var _isShownBottomNav = MutableStateFlow(false)
+    val isShownBottomNav = _isShownBottomNav.asStateFlow()
+
+    private var _currentTopLevelDestination = MutableStateFlow(TopLevelDestination.Page1)
+    val currentTopLevelDestination = _currentTopLevelDestination.asStateFlow()
+
+    fun navigateToTopLevelDestination(destination: TopLevelDestination) {
+        _currentTopLevelDestination.value = destination
+        navController.navigate(destination.route)
+    }
+
     private fun checkIfConnected(): Boolean {
-        // TODO: Check if the device is connected to the internet
         return true
     }
+
+    fun setVisibleBottomNav(isVisible: Boolean) {
+        _isShownBottomNav.value = isVisible
+    }
+
 }

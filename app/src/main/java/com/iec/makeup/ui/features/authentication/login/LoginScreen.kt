@@ -57,11 +57,19 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.iec.makeup.core.ui.AtomicLoadingDialog
 import com.iec.makeup.core.ui.DialogCompose
 import com.iec.makeup.core.utils.validatesEmailPattern
+import com.iec.makeup.ui.theme.Color33FF69B4
+import com.iec.makeup.ui.theme.ColorDB7093
+import com.iec.makeup.ui.theme.ColorFF69B4
+import com.iec.makeup.ui.theme.ColorFFC1CC
+import com.iec.makeup.ui.theme.ColorFFE4E1
+import com.iec.makeup.ui.theme.ColorFFF0F5
 import qrcode.color.Colors
 
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    navToRegister: () -> Unit = {},
+) {
     val viewModel: LoginScreenVM = hiltViewModel()
     val screenState = viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -78,6 +86,7 @@ fun LoginScreen() {
             inputUserName = { viewModel.inputUsername(it) },
             inputPassword = { viewModel.inputPassword(it) },
             errorDismiss = { viewModel.errorDismiss() },
+            navToRegister = navToRegister
         )
     }
 }
@@ -90,6 +99,7 @@ fun LoginScreenStateful(
     inputUserName: (String) -> Unit = {},
     inputPassword: (String) -> Unit = {},
     errorDismiss: () -> Unit = {},
+    navToRegister: () -> Unit = {}
 ) {
     var isPasswordVisible by remember { mutableStateOf(true) }
     var isEmailError by remember { mutableStateOf<String?>(null) }
@@ -98,6 +108,7 @@ fun LoginScreenStateful(
         if (effect != null && effect is LoginScreenEffect.showError) {
             isError = effect.message
         }
+//        if()
     }
     Box(
         modifier = Modifier
@@ -105,9 +116,9 @@ fun LoginScreenStateful(
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFFFFC1CC), // Light Pink
-                        Color(0xFFFFE4E1), // Misty Rose
-                        Color(0xFFFFF0F5)  // Lavender Blush
+                        ColorFFC1CC, // Light Pink
+                        ColorFFE4E1, // Misty Rose
+                        ColorFFF0F5 // Lavender Blush
                     )
                 )
             )
@@ -126,7 +137,7 @@ fun LoginScreenStateful(
                     fontWeight = FontWeight.Bold,
                     fontSize = 40.sp
                 ),
-                color = Color(0xFFFF69B4), // Hot Pink
+                color = ColorFF69B4, // Hot Pink
                 modifier = Modifier.padding(bottom = 32.dp)
             )
 
@@ -134,7 +145,7 @@ fun LoginScreenStateful(
             Text(
                 text = "Login to Your Beauty Journey",
                 style = MaterialTheme.typography.subtitle1,
-                color = Color(0xFFDB7093), // Pale Violet Red
+                color = ColorDB7093, // Pale Violet Red
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
@@ -149,7 +160,7 @@ fun LoginScreenStateful(
                     .fillMaxWidth()
                     .padding(bottom = 8.dp),
                 colors = TextFieldDefaults.colors(
-                    focusedTextColor = Color(0xFFFF69B4),
+                    focusedTextColor = ColorFF69B4,
                     unfocusedTextColor = Color.Black,
                     focusedContainerColor = Color.Transparent,
 
@@ -160,7 +171,7 @@ fun LoginScreenStateful(
                     Icon(
                         imageVector = Icons.Default.Email,
                         contentDescription = "Email Icon",
-                        tint = Color(0xFFFF69B4)
+                        tint = ColorFF69B4
                     )
                 },
 
@@ -184,7 +195,7 @@ fun LoginScreenStateful(
                     .padding(bottom = 8.dp),
                 visualTransformation = if (isPasswordVisible) PasswordVisualTransformation() else VisualTransformation.None, // Show or hide password based on the value of isPasswordVisible=,
                 colors = TextFieldDefaults.colors(
-                    focusedTextColor = Color(0xFFFF69B4),
+                    focusedTextColor = ColorFF69B4,
                     unfocusedTextColor = Color.Black,
                     focusedContainerColor = Color.Transparent,
                 ), singleLine = true,
@@ -193,7 +204,7 @@ fun LoginScreenStateful(
                     Icon(
                         imageVector = Icons.Default.Lock,
                         contentDescription = "Password Icon",
-                        tint = Color(0xFFFF69B4)
+                        tint = ColorFF69B4
                     )
                 },
                 trailingIcon = {
@@ -234,7 +245,7 @@ fun LoginScreenStateful(
                     .padding(top = 16.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFF69B4)
+                    containerColor = ColorFF69B4
                 )
             ) {
                 Text(
@@ -261,13 +272,15 @@ fun LoginScreenStateful(
             ) {
                 Text(
                     text = "New to GlowAura? ",
-                    color = Color(0xFFDB7093)
+                    color = ColorFF69B4
                 )
                 Text(
                     text = "Sign Up",
-                    color = Color(0xFFFF69B4),
+                    color = ColorFF69B4,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { /* Handle sign up */ }
+                    modifier = Modifier.clickable {
+                        navToRegister()
+                    }
                 )
             }
         }
@@ -279,7 +292,7 @@ fun LoginScreenStateful(
                 .padding(16.dp)
                 .size(100.dp)
                 .background(
-                    Color(0x33FF69B4),
+                    color = Color33FF69B4,
                     shape = CircleShape
                 )
         )
@@ -316,5 +329,7 @@ fun LoginScreenStateful(
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
-    LoginScreenStateful()
+    LoginScreenStateful(
+
+    )
 }

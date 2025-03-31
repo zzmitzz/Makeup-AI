@@ -2,6 +2,22 @@ package com.iec.makeup.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+/*
+ -----------------------------------------------
+ Color versions 2
+ */
+
+val ColorFFC1CC = Color(0xFFFFC1CC)// Light Pink
+val ColorFFE4E1 = Color(0xFFFFE4E1) // Misty Rose
+val ColorFFF0F5 = Color(0xFFFFF0F5) // Lavender Blush
+val ColorFF69B4 = Color(0xFFFF69B4) // Hot Pink
+val ColorDB7093 = Color(0xFFDB7093) // Pale Violet Red
+val Color33FF69B4 = Color(0x33FF69B4)
+/*
+ -----------------------------------------------
+ Color versions 1
+ */
+
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
@@ -58,3 +74,5 @@ val DarkOnSurface = Color(0xFFECE0E4)
 val DarkSurfaceVariant = Color(0xFF514347)
 val DarkOnSurfaceVariant = Color(0xFFD5C2C6)
 val DarkOutline = Color(0xFF9E8C91)
+
+

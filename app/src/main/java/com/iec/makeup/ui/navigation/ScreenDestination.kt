@@ -69,16 +69,16 @@ sealed class Routes(
 
     // Home routes
     data object Page1 : Routes("page1") {
-        fun createRoute() = "page1"
+        fun createRoute() = "main/page1"
     }
     data object Page2 : Routes("page2") {
-        fun createRoute() = "page2"
+        fun createRoute() = "main/page2"
     }
     data object Page3 : Routes("page3") {
-        fun createRoute() = "page3"
+        fun createRoute() = "main/page3"
     }
     data object Page4 : Routes("page4") {
-        fun createRoute() = "page4"
+        fun createRoute() = "main/page4"
     }
 
 
