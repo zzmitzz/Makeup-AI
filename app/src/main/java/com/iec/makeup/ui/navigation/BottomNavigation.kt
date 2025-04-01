@@ -50,7 +50,7 @@ fun BottomNavigationBar(
 ){
     return Card(
         modifier = Modifier
-            .height(50.dp)
+            .height(60.dp)
             .fillMaxWidth(),
     ){
         Row(

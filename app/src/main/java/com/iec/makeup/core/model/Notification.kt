@@ -18,7 +18,7 @@ val mockNotificationList = mutableListOf<Notification>().apply {
             Notification(
                 id = it,
                 title = "Notification $it",
-                message = "This is a notification messagdse This is a notification messagdse This is a notification messagdse This is a notification messagdse This is a notification messagdThis is a notification messagdseThis is a notification messagdseThis is a notification messagdseThis is a notification messagdseThis is a notification messagdseThis is a notification messagdseThis is a notification messagdseThis is a notification messagdseThis is a notification messagdseThis is a notification messagdseThis is a notification messagdseThis is a notification messagdseThis is a notification messagdseThis is a notification messagdseThis is a notification messagdsese This is a notification messagdse",
+                message = "This is notification $it",
                 timestamp = System.currentTimeMillis(),
                 isRead = false
             )

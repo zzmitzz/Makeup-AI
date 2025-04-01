@@ -11,6 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.iec.makeup.ui.MakeupAppState
+import com.iec.makeup.ui.features.ai_makeup.DetailScreen
+import com.iec.makeup.ui.features.ai_makeup.InstructionScreen
 import com.iec.makeup.ui.features.authentication.login.LoginScreen
 import com.iec.makeup.ui.features.authentication.register.RegisterScreen
 import com.iec.makeup.ui.features.home.HomeScreen
@@ -30,7 +32,8 @@ fun NavigationGraph(
             startDestination = Routes.Login.createRoute(),
             route = "auth"
         ) {
-            composable(route = Routes.Login.createRoute(),
+            composable(
+                route = Routes.Login.createRoute(),
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Right,
@@ -71,48 +74,39 @@ fun NavigationGraph(
                 )
             }
         }
+        // For type-safety, since the project is current in development then we will not implement this
         navigation(
-            startDestination = Routes.Page1.createRoute(),
+            startDestination = Routes.MainHome.createRoute(),
             route = "main"
         ) {
-
-
-            composable(route = Routes.Page1.createRoute()) {
+            /*
+              - Main Route
+             */
+            composable(route = Routes.MainHome.createRoute()) {
                 appState.setVisibleBottomNav(true)
                 HomeScreen(
                     navToNotification = {
-                        navController.navigate(Routes.Notification.createRoute()) {
+                        navController.navigate(Routes.MainNotification.createRoute()) {
                             launchSingleTop = true
                             restoreState = false
                         }
                     },
                     navToSearch = {
-                        navController.navigate(Routes.Search.createRoute()) {
+                        navController.navigate(Routes.MainSearch.createRoute()) {
                             launchSingleTop = true
                             restoreState = false
                         }
                     },
                     navToAllMakeUp = {
-                        navController.navigate(Routes.AllMakeUp.createRoute()) {
+                        navController.navigate(Routes.MainAllMakeUp.createRoute()) {
                             launchSingleTop = true
                             restoreState = false
                         }
                     }
                 )
             }
-            composable(route = Routes.Page2.createRoute()) {
-                appState.setVisibleBottomNav(true)
-                Text("Page 2")
-            }
-            composable(route = Routes.Page3.createRoute()) {
-                appState.setVisibleBottomNav(true)
-                Text("Page 3")
-            }
-            composable(route = Routes.Page4.createRoute()) {
-                appState.setVisibleBottomNav(true)
-                Text("Page 4")
-            }
-            composable(route = Routes.Notification.createRoute(),
+            composable(
+                route = Routes.MainNotification.createRoute(),
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Up,
@@ -130,7 +124,8 @@ fun NavigationGraph(
                     navBack = { navController.popBackStack() }
                 )
             }
-            composable(route = Routes.Search.createRoute(),
+            composable(
+                route = Routes.MainSearch.createRoute(),
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Up,
@@ -148,7 +143,8 @@ fun NavigationGraph(
                     navBack = { navController.popBackStack() }
                 )
             }
-            composable(route = Routes.AllMakeUp.createRoute(),
+            composable(
+                route = Routes.MainAllMakeUp.createRoute(),
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Right,
@@ -164,6 +160,59 @@ fun NavigationGraph(
                 AllMakeUpScreen(
                     navBack = { navController.popBackStack() }
                 )
+            }
+
+
+            /*
+             - AI_Screen Route
+             */
+
+            navigation(
+                startDestination = Routes.InstructionScreen.createRoute(),
+                route = "ai"
+            ) {
+                composable(route = Routes.Page2.createRoute()) {
+                    appState.setVisibleBottomNav(true)
+                    DetailScreen(
+                        navBack = { navController.popBackStack() },
+                        navInstruction = { navController.navigate(Routes.InstructionScreen.createRoute()) }
+                    )
+                }
+
+                composable(route = Routes.InstructionScreen.createRoute()) {
+                    appState.setVisibleBottomNav(false)
+                    InstructionScreen(
+                        navBack = { navController.popBackStack() },
+                        navLaunchScreen = {
+                            navController.navigate(Routes.Page2.createRoute()) {
+                                popUpTo("ai") {
+                                    inclusive = false
+                                }
+                                launchSingleTop = true
+                                restoreState = false
+                            }
+                        }
+                    )
+                }
+
+            }
+
+
+            /*
+             - Cart Route
+             */
+            composable(route = Routes.Page3.createRoute()) {
+                appState.setVisibleBottomNav(true)
+                Text("Page 3")
+            }
+
+
+            /*
+             - Profile Route
+             */
+            composable(route = Routes.Page4.createRoute()) {
+                appState.setVisibleBottomNav(true)
+                Text("Page 4")
             }
         }
     }

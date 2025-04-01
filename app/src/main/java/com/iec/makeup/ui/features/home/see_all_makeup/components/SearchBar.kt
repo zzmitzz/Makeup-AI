@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.iec.makeup.core.ui.IECTextField
+import com.iec.makeup.ui.theme.ColorDB7093
 import com.iec.makeup.ui.theme.ColorFFE4E1
 import com.iec.makeup.ui.theme.ColorFFF0F5
 import com.iec.makeup.ui.theme.PurpleGrey40
@@ -44,13 +45,17 @@ fun SearchBar(
     val searchQuery = remember { mutableStateOf("") }
 
     Row(
-        modifier = Modifier.padding(vertical = 8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(ColorDB7093)
+            .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Icon(
             imageVector = Icons.Default.ArrowBackIosNew,
             contentDescription = "Back",
+            tint = Color.White,
             modifier = Modifier
                 .padding(8.dp)
                 .size(22.dp)
@@ -59,7 +64,9 @@ fun SearchBar(
                 }
         )
         Card(
-            modifier = Modifier.height(40.dp).width(300.dp),
+            modifier = Modifier
+                .height(40.dp)
+                .width(320.dp),
             shape = RoundedCornerShape(8.dp),
             backgroundColor = Color.White
         ) {
@@ -75,6 +82,7 @@ fun SearchBar(
         Icon(
             imageVector = Icons.Default.FilterAlt,
             contentDescription = "Filter",
+            tint = Color.White,
             modifier = Modifier
                 .padding(8.dp)
                 .size(22.dp)

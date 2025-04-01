@@ -7,18 +7,29 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,7 +44,17 @@ import com.iec.makeup.ui.features.home.components.OrderStatusChips
 import com.iec.makeup.ui.features.home.components.StoriesItems
 import com.iec.makeup.ui.features.home.components.StunningRoundedCard
 import com.iec.makeup.ui.features.home.components.TopAppBar
+import com.iec.makeup.ui.features.home.helpers.OrderStatusType
+import com.iec.makeup.ui.theme.ColorDB7093
 import com.iec.makeup.ui.theme.ColorFF69B4
+import com.iec.makeup.ui.theme.ColorFFC1CC
+
+
+
+/*
+ - Later implement of MVI architecture, just manage state directly on screen.
+ */
+
 
 @Composable
 fun HomeScreen(
@@ -57,6 +78,7 @@ fun AuraBeautyApp(
     navToAllMakeUp: () -> Unit = {}
 ) {
     val scrollview = rememberScrollState()
+    val orderChipSelected = remember {mutableStateOf<OrderStatusType>(OrderStatusType.TO_RECEIVE)}
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -106,8 +128,62 @@ fun AuraBeautyApp(
                     modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
                 )
                 // Order Status Chips
-                OrderStatusChips()
-
+                OrderStatusChips(
+                    viewToPay = {
+                        orderChipSelected.value = OrderStatusType.TO_PAY
+                    },
+                    viewToReceive = {
+                        orderChipSelected.value = OrderStatusType.TO_RECEIVE
+                    },
+                    viewToReview = {
+                        orderChipSelected.value = OrderStatusType.TO_REVIEW
+                    },
+                    currentSelected = orderChipSelected.value
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Card(
+                    modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.elevatedCardElevation(0.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = ColorDB7093
+                    )
+                ) {
+                   Box(
+                       modifier = Modifier.fillMaxSize(),
+                       contentAlignment = Alignment.Center
+                   ){
+                       when(orderChipSelected.value) {
+                           OrderStatusType.TO_PAY -> {
+                               Text(
+                                   text = "You have 1 order to pay",
+                                   fontWeight = FontWeight.Bold,
+                                   color = Color.White,
+                                   fontSize = 12.sp,
+                                   modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+                               )
+                           }
+                           OrderStatusType.TO_RECEIVE -> {
+                               Text(
+                                   text = "You have 1 order to receive",
+                                   fontWeight = FontWeight.Bold,
+                                   color = Color.White,
+                                   fontSize = 12.sp,
+                                   modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+                               )
+                           }
+                           OrderStatusType.TO_REVIEW -> {
+                               Text(
+                                   text = "You have 1 order to review",
+                                   fontWeight = FontWeight.Bold,
+                                   color = Color.White,
+                                   fontSize = 12.sp,
+                                   modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+                               )
+                           }
+                       }
+                   }
+                }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,

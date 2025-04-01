@@ -25,29 +25,29 @@ enum class TopLevelDestination(
     val route: String
 ) {
     Page1(
-        selectedIcon = R.drawable.check_circle_24dp_df9d9b_fill1_wght400_grad0_opsz24,
-        unSelectedIcon = R.drawable.circle_24dp_434343_fill0_wght400_grad0_opsz24,
+        selectedIcon = R.drawable.home_24dp_df9d9b_fill1_wght400_grad0_opsz24,
+        unSelectedIcon = R.drawable.home_24dp_df9d9b_fill0_wght400_grad0_opsz24,
         iconText = R.string.page1,
         titleTextId = R.string.page1_title,
-        route = Routes.Page1.createRoute()
+        route = Routes.MainHome.createRoute()
     ),
     Page2(
-        selectedIcon = R.drawable.check_circle_24dp_df9d9b_fill1_wght400_grad0_opsz24,
-        unSelectedIcon = R.drawable.circle_24dp_434343_fill0_wght400_grad0_opsz24,
+        selectedIcon = R.drawable.lens_blur_24dp_df9d9b_fill0_wght400_grad0_opsz24,
+        unSelectedIcon = R.drawable.lens_blur_24dp_df9d9b_fill0_wght400_grad0_opsz24,
         iconText = R.string.page2,
         titleTextId = R.string.page2_title,
         route = Routes.Page2.createRoute()
     ),
     Page3(
-        selectedIcon = R.drawable.check_circle_24dp_df9d9b_fill1_wght400_grad0_opsz24,
-        unSelectedIcon = R.drawable.circle_24dp_434343_fill0_wght400_grad0_opsz24,
+        selectedIcon = R.drawable.shopping_cart_24dp_df9d9b_fill1_wght400_grad0_opsz24,
+        unSelectedIcon = R.drawable.shopping_cart_24dp_df9d9b_fill0_wght400_grad0_opsz24,
         iconText = R.string.page3,
         titleTextId = R.string.page3_title,
         route = Routes.Page3.createRoute()
     ),
     Page4(
-        selectedIcon = R.drawable.check_circle_24dp_df9d9b_fill1_wght400_grad0_opsz24,
-        unSelectedIcon = R.drawable.circle_24dp_434343_fill0_wght400_grad0_opsz24,
+        selectedIcon = R.drawable.account_circle_24dp_df9d9b_fill1_wght400_grad0_opsz24,
+        unSelectedIcon = R.drawable.account_circle_24dp_df9d9b_fill0_wght400_grad0_opsz24,
         iconText = R.string.page4,
         titleTextId = R.string.page4_title,
         route = Routes.Page4.createRoute()
@@ -74,34 +74,46 @@ sealed class Routes(
     }
 
     /*
-    -- Route /main --
+    -- Route /main/home --
      */
-    data object Page1 : Routes("page1") {
-        fun createRoute() = "main/page1"
+    data object MainHome : Routes("page1") {
+        fun createRoute() = "main//page1"
     }
 
+    data object MainNotification : Routes("notification") {
+        fun createRoute() = "maidn/notification"
+    }
+
+    data object MainSearch : Routes("search") {
+        fun createRoute() = "main/search"
+    }
+
+    data object MainAllMakeUp : Routes("all_makeup") {
+        fun createRoute() = "main/all_makeup"
+    }
+
+
+    /*
+    -- Route /main/ai --
+     */
     data object Page2 : Routes("page2") {
-        fun createRoute() = "main/page2"
+        fun createRoute() = "main/ai/page2"
     }
 
+    data object InstructionScreen : Routes("instruction") {
+        fun createRoute() = "main/ai/instruction"
+    }
+
+
+    /*
+    -- Route page3
+     */
     data object Page3 : Routes("page3") {
         fun createRoute() = "main/page3"
     }
 
     data object Page4 : Routes("page4") {
         fun createRoute() = "main/page4"
-    }
-
-    data object Notification : Routes("notification") {
-        fun createRoute() = "main/notification"
-    }
-
-    data object Search : Routes("search") {
-        fun createRoute() = "main/search"
-    }
-
-    data object AllMakeUp: Routes("all_makeup") {
-        fun createRoute() = "main/all_makeup"
     }
 
     companion object {

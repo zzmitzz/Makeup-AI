@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowUpward
+import androidx.compose.material.icons.outlined.Chat
 import androidx.compose.material.icons.outlined.NotificationsNone
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Settings
@@ -22,7 +23,7 @@ import androidx.compose.ui.unit.dp
 fun TopAppBar(
     doScan: () -> Unit = {},
     showNotifications: () -> Unit = {},
-    showSettings: () -> Unit = {}
+    showChat: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -55,12 +56,12 @@ fun TopAppBar(
                     }
             )
             Icon(
-                imageVector = Icons.Outlined.Settings,
+                imageVector = Icons.Outlined.Chat,
                 contentDescription = "Settings",
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .clickable {
-                        showSettings()
+                        showChat()
                     }
             )
         }

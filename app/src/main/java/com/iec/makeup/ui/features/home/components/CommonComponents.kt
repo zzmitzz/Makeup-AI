@@ -2,6 +2,7 @@ package com.iec.makeup.ui.features.home.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,10 +39,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.Coil
-import coil.compose.AsyncImage
+import coil3.compose.AsyncImage
 import com.iec.makeup.R
+import com.iec.makeup.ui.features.home.helpers.OrderStatusType
 import com.iec.makeup.ui.theme.ColorDB7093
+import com.iec.makeup.ui.theme.ColorFFC1CC
 
 
 @Composable
@@ -61,36 +63,64 @@ fun RecentlyViewedItems() {
     }
 }
 
+
 @Composable
 fun OrderStatusChips(
     viewToPay: () -> Unit = {},
     viewToReceive: () -> Unit = {},
-    viewToReview: () -> Unit = {}
+    viewToReview: () -> Unit = {},
+    currentSelected: OrderStatusType
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        OrderChip("To Pay", ColorDB7093)
-        OrderChip("To Receive", ColorDB7093, hasNotification = true)
-        OrderChip("To Review", ColorDB7093)
+        Box(
+            modifier = Modifier.clickable{
+                viewToPay()
+            }
+        ){
+            OrderChip("To Pay", isSelected = currentSelected == OrderStatusType.TO_PAY)
+        }
+        Box(
+            modifier = Modifier.clickable{
+                viewToReceive()
+            }
+        ){
+            OrderChip(
+                "To Receive",
+                hasNotification = true,
+                isSelected = currentSelected == OrderStatusType.TO_RECEIVE
+            )
+        }
+        Box(
+            modifier = Modifier.clickable{
+                viewToReview()
+            }
+        ){
+            OrderChip("To Review", isSelected = currentSelected == OrderStatusType.TO_REVIEW)
+        }
     }
 }
 
 @Composable
-fun OrderChip(text: String, pinkColor: Color, hasNotification: Boolean = false) {
+fun OrderChip(
+    text: String,
+    hasNotification: Boolean = false,
+    isSelected: Boolean = false
+) {
     Box(
         modifier = Modifier
             .height(32.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(pinkColor.copy(alpha = 0.1f))
+            .background(if (isSelected) ColorDB7093 else ColorFFC1CC)
             .padding(horizontal = 16.dp),
         contentAlignment = Alignment.Center
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = text,
-                color = pinkColor,
+                color = Color.White,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium
             )
