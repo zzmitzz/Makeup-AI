@@ -55,32 +55,54 @@ enum class TopLevelDestination(
 
 }
 
+// Just rush, not yet implement type safe for this navigation.
 
 sealed class Routes(
     route: String
 ) {
+
+    /*
+    -- Route /auth --
+     */
     // Authorise Routes
     data object Login : Routes("login") {
         fun createRoute() = "login"
     }
+
     data object Register : Routes("register") {
         fun createRoute() = "register"
     }
 
-    // Home routes
+    /*
+    -- Route /main --
+     */
     data object Page1 : Routes("page1") {
         fun createRoute() = "main/page1"
     }
+
     data object Page2 : Routes("page2") {
         fun createRoute() = "main/page2"
     }
+
     data object Page3 : Routes("page3") {
         fun createRoute() = "main/page3"
     }
+
     data object Page4 : Routes("page4") {
         fun createRoute() = "main/page4"
     }
 
+    data object Notification : Routes("notification") {
+        fun createRoute() = "main/notification"
+    }
+
+    data object Search : Routes("search") {
+        fun createRoute() = "main/search"
+    }
+
+    data object AllMakeUp: Routes("all_makeup") {
+        fun createRoute() = "main/all_makeup"
+    }
 
     companion object {
 //        const val

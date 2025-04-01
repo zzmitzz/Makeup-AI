@@ -38,10 +38,10 @@ sealed class LoginScreenEvent() : Reducer.ViewEvent {
 }
 
 sealed class LoginScreenEffect() : Reducer.ViewEffect {
-    data class showError(val message: String?) : LoginScreenEffect()
-    data class showToast(val message: String) : LoginScreenEffect()
-    data class navigateToHome(val data: String) : LoginScreenEffect()
-    data object navigateToSignUp : LoginScreenEffect()
+    data class ShowError(val message: String?) : LoginScreenEffect()
+    data class ShowToast(val message: String) : LoginScreenEffect()
+    data object NavigateToHome : LoginScreenEffect()
+    data object NavigateToSignUp : LoginScreenEffect()
 }
 
 class LoginScreenReducer @Inject constructor() :
@@ -56,7 +56,7 @@ class LoginScreenReducer @Inject constructor() :
             }
 
             LoginScreenEvent.Login -> {
-                return currentState to null
+                return currentState to LoginScreenEffect.NavigateToHome
             }
 
             LoginScreenEvent.SignUp -> {
@@ -85,7 +85,7 @@ class LoginScreenReducer @Inject constructor() :
             }
 
             is LoginScreenEvent.OnShowError -> {
-                return currentState to LoginScreenEffect.showError(event.message)
+                return currentState to LoginScreenEffect.ShowError(event.message)
             }
         }
     }
@@ -113,30 +113,32 @@ class LoginScreenVM @Inject constructor(
         coroutineScope.launch(Dispatchers.IO) {
             sendEvent(LoginScreenEvent.OnLoadingDialog(true))
             try {
-                withTimeout(5000) {
-                    val result =
-                        authRepository.doLogin(state.value.username!!, state.value.password!!)
-                    if (result.isSuccessful) {
-                        dataStore.saveKey(PreferenceKeys.USER_NAME, state.value.username!!)
-                        dataStore.saveKey(PreferenceKeys.USER_PASSWORD, state.value.password!!)
-                        dataStore.saveKey(
-                            PreferenceKeys.USER_TOKEN,
-                            result.body()!!.data?.accessToken ?: ""
-                        )
-
-                        sendEventWithEffect(LoginScreenEvent.Login)
-                    } else {
-                        try {
-                            val error =
-                                result.errorBody()?.string()?.fromJson<APIResult<String>>()
-                            errorArrived(
-                                error?.message ?: "Unknown error"
-                            )
-                        } catch (e: Exception) {
-                            errorArrived(e.toString())
-                        }
-                    }
-                }
+//                withTimeout(5000) {
+//                    val result =
+//                        authRepository.doLogin(state.value.username!!, state.value.password!!)
+//                    if (result.isSuccessful) {
+//                        dataStore.saveKey(PreferenceKeys.USER_NAME, state.value.username!!)
+//                        dataStore.saveKey(PreferenceKeys.USER_PASSWORD, state.value.password!!)
+//                        dataStore.saveKey(
+//                            PreferenceKeys.USER_TOKEN,
+//                            result.body()!!.data?.accessToken ?: ""
+//                        )
+//
+//                        sendEventWithEffect(LoginScreenEvent.Login)
+//                    } else {
+//                        try {
+//                            val error =
+//                                result.errorBody()?.string()?.fromJson<APIResult<String>>()
+//                            errorArrived(
+//                                error?.message ?: "Unknown error"
+//                            )
+//                        } catch (e: Exception) {
+//                            errorArrived(e.toString())
+//                        }
+//                    }
+//                }
+                delay(2000)
+                sendEventWithEffect(LoginScreenEvent.Login)
             } catch (e: TimeoutCancellationException) {
                 errorArrived(e.toString())
             }

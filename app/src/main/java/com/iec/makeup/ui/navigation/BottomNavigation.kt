@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
@@ -26,6 +27,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.iec.makeup.R
 import com.iec.makeup.ui.theme.ColorDB7093
 import com.iec.makeup.ui.theme.ColorFFC1CC
@@ -48,13 +50,13 @@ fun BottomNavigationBar(
 ){
     return Card(
         modifier = Modifier
-            .height(80.dp)
-            .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 4.dp),
+            .height(50.dp)
+            .fillMaxWidth(),
     ){
         Row(
             modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceAround
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             // PAGE 1
             IconState(currentDestination == TopLevelDestination.Page1, TopLevelDestination.Page1, onTopLevelClick)
@@ -78,15 +80,15 @@ fun IconState(isChosen: Boolean, icon: TopLevelDestination, onClick: (TopLevelDe
         }
     ) {
         Image(
+            modifier = Modifier.size(24.dp),
             painter = if(isChosen) painterResource(icon.selectedIcon) else painterResource(icon.unSelectedIcon),
             contentDescription = ""
         )
         Text(
             text = stringResource(icon.iconText),
             color = if(isChosen) ColorDB7093 else Color.DarkGray,
-            style = TextStyle(
-                fontWeight = FontWeight.Bold
-            )
+            style = TextStyle(),
+            fontSize = 12.sp
         )
     }
 }

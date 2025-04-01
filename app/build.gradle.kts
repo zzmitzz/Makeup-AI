@@ -98,14 +98,14 @@ dependencies {
 // Hilt for ViewModel
     implementation(libs.androidx.fragment.ktx)
     // Lifecycle ViewModel
-    implementation (libs.androidx.lifecycle.viewmodel.ktx.v261)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx.v261)
     // Retrofit
-    implementation (libs.retrofit.v290)
-    implementation (libs.converter.gson.v290)
+    implementation(libs.retrofit.v290)
+    implementation(libs.converter.gson.v290)
 
     // Hilt
-    implementation (libs.hilt.android.v250)
-    kapt (libs.hilt.compiler)
+    implementation(libs.hilt.android.v250)
+    kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.pusher.java.client)
@@ -147,4 +147,6 @@ dependencies {
 
     // If using Kotlin Serialization, add the plugin
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.coil.kt.coil.compose)
 }

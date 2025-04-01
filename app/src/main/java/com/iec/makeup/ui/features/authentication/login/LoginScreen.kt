@@ -69,6 +69,7 @@ import qrcode.color.Colors
 @Composable
 fun LoginScreen(
     navToRegister: () -> Unit = {},
+    navToHome: () -> Unit = {}
 ) {
     val viewModel: LoginScreenVM = hiltViewModel()
     val screenState = viewModel.state.collectAsStateWithLifecycle()
@@ -86,7 +87,8 @@ fun LoginScreen(
             inputUserName = { viewModel.inputUsername(it) },
             inputPassword = { viewModel.inputPassword(it) },
             errorDismiss = { viewModel.errorDismiss() },
-            navToRegister = navToRegister
+            navToRegister = navToRegister,
+            navToHome = navToHome
         )
     }
 }
@@ -99,16 +101,19 @@ fun LoginScreenStateful(
     inputUserName: (String) -> Unit = {},
     inputPassword: (String) -> Unit = {},
     errorDismiss: () -> Unit = {},
-    navToRegister: () -> Unit = {}
+    navToRegister: () -> Unit = {},
+    navToHome: () -> Unit = {}
 ) {
     var isPasswordVisible by remember { mutableStateOf(true) }
     var isEmailError by remember { mutableStateOf<String?>(null) }
     var isError by remember { mutableStateOf<String?>(null) }
     LaunchedEffect(key1 = effect) {
-        if (effect != null && effect is LoginScreenEffect.showError) {
+        if (effect != null && effect is LoginScreenEffect.ShowError) {
             isError = effect.message
         }
-//        if()
+        if (effect != null && effect is LoginScreenEffect.NavigateToHome) {
+            navToHome()
+        }
     }
     Box(
         modifier = Modifier
@@ -299,8 +304,9 @@ fun LoginScreenStateful(
 
         AnimatedVisibility(
             visible = state.isLoading,
-            modifier = Modifier.fillMaxSize()
-                .clickable {  },
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable { },
             enter = slideInVertically(
                 initialOffsetY = { fullHeight -> -fullHeight },
             ) + fadeIn(),
@@ -317,7 +323,7 @@ fun LoginScreenStateful(
                 AtomicLoadingDialog()
             }
         }
-        if(isError != null){
+        if (isError != null) {
             DialogCompose(
                 text = isError!!,
                 onCloseAction = { errorDismiss() },

@@ -22,11 +22,9 @@ fun rememberMakeupAppState(
     }
 }
 
-
-@Singleton
-class MakeupAppState @Inject constructor(
+class MakeupAppState(
     private val navController: NavController,
-){
+) {
 
     private var _isAuthenticated = MutableStateFlow(false)
     val isAuth get() = _isAuthenticated.asStateFlow()
@@ -38,8 +36,10 @@ class MakeupAppState @Inject constructor(
     val currentTopLevelDestination = _currentTopLevelDestination.asStateFlow()
 
     fun navigateToTopLevelDestination(destination: TopLevelDestination) {
-        _currentTopLevelDestination.value = destination
-        navController.navigate(destination.route)
+        if (currentTopLevelDestination.value != destination) {
+            _currentTopLevelDestination.value = destination
+            navController.navigate(destination.route)
+        }
     }
 
     private fun checkIfConnected(): Boolean {

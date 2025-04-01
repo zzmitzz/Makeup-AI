@@ -53,7 +53,7 @@ fun DialogCompose(
     ) {
         Card(
             modifier = Modifier
-                .height(360.dp)
+                .height(320.dp)
                 .fillMaxWidth(),
             shape = RoundedCornerShape(8.dp),
             colors = CardDefaults.cardColors().copy(containerColor = Color.White),
