@@ -47,18 +47,19 @@ enum class InstructionDetailEnu(
 ) {
     Screen1(
         image = R.drawable.instruction_1_2,
-        title = "Step 1",
-        description = "Please click on the camera icon to open your camera"
+        title = "Căn chỉnh ánh sáng",
+        description = "Dùng ánh sáng tự nhiên hoặc dàn chiếu đều, không để bóng tối che mất.\n" +
+                "Tránh ánh sáng quá mạnh gây lóa hoặc đổ bóng."
     ),
     Screen2(
-        image = R.drawable.instruction_1_2,
-        title = "Step 2",
-        description = "Please click on the camera icon to open your camera"
+        image = R.drawable.chatgpt_image_apr_2__2025__01_14_53_am,
+        title = "Góc chụp, vị trí chụp",
+        description = "Chọn góc chụp, vị trí chụp cho khuôn mặt.\n"
     ),
     Screen3(
         image = R.drawable.instruction_1_2,
-        title = "Step 3",
-        description = "Please click on the camera icon to open your camera"
+        title = "Xác nhận",
+        description = "Điền mô tả và chọn phương thức tải ảnh lên.\n"
     )
 }
 
