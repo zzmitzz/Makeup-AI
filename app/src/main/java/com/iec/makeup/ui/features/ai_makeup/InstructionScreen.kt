@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iec.makeup.R
 import com.iec.makeup.ui.features.ai_makeup.components.ManualScreenComponents
+import com.iec.makeup.ui.theme.ColorDB7093
 import com.iec.makeup.ui.theme.ColorFF69B4
 import kotlinx.coroutines.launch
 
@@ -86,18 +87,21 @@ fun InstructionScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = 12.dp, horizontal = 16.dp)
             .background(Color.White)
     ) {
-        Icon(
-            imageVector = Icons.Default.ArrowBackIosNew,
-            contentDescription = "Back",
-            modifier = Modifier
-                .size(24.dp)
-                .clickable {
-                    navBack()
-                }
-        )
+        Box(
+            modifier = Modifier.padding(start = 16.dp, top = 16.dp)
+        ){
+            Icon(
+                imageVector = Icons.Default.ArrowBackIosNew,
+                contentDescription = "Back",
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable {
+                        navBack()
+                    }
+            )
+        }
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center
@@ -129,7 +133,7 @@ fun InstructionScreen(
                     },
                     colors = ButtonDefaults.buttonColors(
                         contentColor = ColorFF69B4,
-                        backgroundColor = ColorFF69B4
+                        backgroundColor = ColorDB7093
                     )
                 ) {
                     Text(

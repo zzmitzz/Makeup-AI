@@ -38,7 +38,11 @@ class MakeupAppState(
     fun navigateToTopLevelDestination(destination: TopLevelDestination) {
         if (currentTopLevelDestination.value != destination) {
             _currentTopLevelDestination.value = destination
-            navController.navigate(destination.route)
+            navController.navigate(destination.route) {
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+            }
         }
     }
 

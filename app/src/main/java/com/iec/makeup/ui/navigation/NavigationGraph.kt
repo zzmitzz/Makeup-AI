@@ -11,8 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.iec.makeup.ui.MakeupAppState
-import com.iec.makeup.ui.features.ai_makeup.DetailScreen
 import com.iec.makeup.ui.features.ai_makeup.InstructionScreen
+import com.iec.makeup.ui.features.ai_makeup.VirtualScreen
 import com.iec.makeup.ui.features.authentication.login.LoginScreen
 import com.iec.makeup.ui.features.authentication.register.RegisterScreen
 import com.iec.makeup.ui.features.home.HomeScreen
@@ -168,12 +168,12 @@ fun NavigationGraph(
              */
 
             navigation(
-                startDestination = Routes.InstructionScreen.createRoute(),
+                startDestination = Routes.Page2.createRoute(),
                 route = "ai"
             ) {
                 composable(route = Routes.Page2.createRoute()) {
                     appState.setVisibleBottomNav(true)
-                    DetailScreen(
+                    VirtualScreen(
                         navBack = { navController.popBackStack() },
                         navInstruction = { navController.navigate(Routes.InstructionScreen.createRoute()) }
                     )

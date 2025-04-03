@@ -17,10 +17,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun IECTextField(placeholder: String, value: String, onValueChange: (String) -> Unit) {
-
+fun IECTextField(
+    placeholder: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     BasicTextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         value = value,
         onValueChange = onValueChange,
         decorationBox = { innerTextField ->
