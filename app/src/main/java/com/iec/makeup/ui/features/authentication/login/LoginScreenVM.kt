@@ -14,6 +14,10 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import kotlinx.coroutines.withTimeout
@@ -109,37 +113,50 @@ class LoginScreenVM @Inject constructor(
         Log.d(TAG, "coroutineScope: ${throwable.message}")
     }
 
+    init {
+        combine(
+            dataStore.readKey(PreferenceKeys.USER_NAME),
+            dataStore.readKey(PreferenceKeys.USER_PASSWORD)
+        ) { email, password ->
+            Pair(email, password)
+        }.onEach {
+            sendEvent(LoginScreenEvent.OnUsernameChange(it.first ?: ""))
+            sendEvent(LoginScreenEvent.OnPasswordChange(it.second ?: ""))
+        }.launchIn(
+            viewModelScope + Dispatchers.IO
+        )
+    }
+
     fun doLogin() {
         coroutineScope.launch(Dispatchers.IO) {
             sendEvent(LoginScreenEvent.OnLoadingDialog(true))
             try {
-//                withTimeout(5000) {
-//                    val result =
-//                        authRepository.doLogin(state.value.username!!, state.value.password!!)
-//                    if (result.isSuccessful) {
-//                        dataStore.saveKey(PreferenceKeys.USER_NAME, state.value.username!!)
-//                        dataStore.saveKey(PreferenceKeys.USER_PASSWORD, state.value.password!!)
-//                        dataStore.saveKey(
-//                            PreferenceKeys.USER_TOKEN,
-//                            result.body()!!.data?.accessToken ?: ""
-//                        )
-//
-//                        sendEventWithEffect(LoginScreenEvent.Login)
-//                    } else {
-//                        try {
-//                            val error =
-//                                result.errorBody()?.string()?.fromJson<APIResult<String>>()
-//                            errorArrived(
-//                                error?.message ?: "Unknown error"
-//                            )
-//                        } catch (e: Exception) {
-//                            errorArrived(e.toString())
-//                        }
-//                    }
-//                }
-                delay(2000)
-                sendEventWithEffect(LoginScreenEvent.Login)
-            } catch (e: TimeoutCancellationException) {
+                withTimeout(5000) {
+                    val result =
+                        authRepository.doLogin(state.value.username!!, state.value.password!!)
+                    if (result.isSuccessful) {
+                        dataStore.saveKey(PreferenceKeys.USER_NAME, state.value.username!!)
+                        dataStore.saveKey(PreferenceKeys.USER_PASSWORD, state.value.password!!)
+                        dataStore.saveKey(
+                            PreferenceKeys.USER_TOKEN,
+                            result.body()!!.data?.accessToken ?: ""
+                        )
+                        sendEventWithEffect(LoginScreenEvent.Login)
+                    } else {
+                        try {
+                            val error =
+                                result.errorBody()?.string()?.fromJson<APIResult<String>>()
+                            errorArrived(
+                                error?.message ?: "Unknown error"
+                            )
+                        } catch (e: Exception) {
+                            errorArrived(e.toString())
+                        }
+                    }
+                }
+//                delay(2000)
+//                sendEventWithEffect(LoginScreenEvent.Login)
+            } catch (e: Exception) {
                 errorArrived(e.toString())
             }
             sendEvent(LoginScreenEvent.OnLoadingDialog(false))

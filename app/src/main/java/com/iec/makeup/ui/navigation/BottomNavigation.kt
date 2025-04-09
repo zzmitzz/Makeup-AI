@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import com.iec.makeup.R
 import com.iec.makeup.ui.theme.ColorDB7093
 import com.iec.makeup.ui.theme.ColorFFC1CC
+import com.iec.makeup.ui.theme.ColorFFE4E1
 import com.iec.makeup.ui.theme.ColorFFF0F5
 import qrcode.color.Colors
 
@@ -52,6 +55,9 @@ fun BottomNavigationBar(
         modifier = Modifier
             .height(60.dp)
             .fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = ColorFFF0F5
+        )
     ){
         Row(
             modifier = Modifier.fillMaxSize(),

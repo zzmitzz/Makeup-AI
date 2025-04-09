@@ -5,6 +5,7 @@ import com.iec.makeup.core.DataStoreInterface
 import com.iec.makeup.core.PersistentState
 import com.iec.makeup.core.PreferenceKeys
 import com.iec.makeup.core.utils.Constants.BASE_URL
+import com.iec.makeup.core.utils.Constants.TIME_OUT
 import com.iec.makeup.data.remote.api.AuthEndpoint
 import com.iec.makeup.data.repository.AuthRepository
 import com.iec.makeup.data.repository.AuthRepositoryImpl
@@ -22,6 +23,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.Duration
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 
@@ -48,6 +51,7 @@ class AppModule {
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(authInterceptor)
+            .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
             .build()
 
 

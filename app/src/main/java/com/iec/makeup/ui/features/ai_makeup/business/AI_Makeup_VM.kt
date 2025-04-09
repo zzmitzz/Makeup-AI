@@ -93,8 +93,8 @@ class AIScreenVM @Inject constructor() :
         sendEvent(AIScreenEvent.OnLoading(false))
     }
 
-    fun showError(message: String?){
-        sendEvent(AIScreenEvent.OnError(message))
+    fun showError(message: String?) {
+        sendEventWithEffect(AIScreenEvent.OnError(message))
     }
 
     fun uploadImage(uri: Uri) {

@@ -1,4 +1,4 @@
-package com.iec.makeup.ui.features.home.see_all_makeup.components
+package com.iec.makeup.ui.features.home.screen_all_makeup.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,12 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.FilterAlt
@@ -25,15 +21,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.iec.makeup.core.ui.IECTextField
+import com.iec.makeup.ui.theme.Color33FF69B4
 import com.iec.makeup.ui.theme.ColorDB7093
 import com.iec.makeup.ui.theme.ColorFFE4E1
 import com.iec.makeup.ui.theme.ColorFFF0F5
-import com.iec.makeup.ui.theme.PurpleGrey40
+import com.iec.makeup.ui.theme.DarkBackground
 
 
 @Composable
@@ -47,7 +42,6 @@ fun SearchBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(ColorDB7093)
             .padding(vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -55,7 +49,7 @@ fun SearchBar(
         Icon(
             imageVector = Icons.Default.ArrowBackIosNew,
             contentDescription = "Back",
-            tint = Color.White,
+            tint = DarkBackground,
             modifier = Modifier
                 .padding(8.dp)
                 .size(22.dp)
@@ -82,7 +76,7 @@ fun SearchBar(
         Icon(
             imageVector = Icons.Default.FilterAlt,
             contentDescription = "Filter",
-            tint = Color.White,
+            tint = DarkBackground,
             modifier = Modifier
                 .padding(8.dp)
                 .size(22.dp)

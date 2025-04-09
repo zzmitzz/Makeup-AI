@@ -29,11 +29,14 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -64,6 +67,7 @@ import com.iec.makeup.ui.theme.ColorFFC1CC
 import com.iec.makeup.ui.theme.ColorFFE4E1
 import com.iec.makeup.ui.theme.ColorFFF0F5
 import qrcode.color.Colors
+import javax.inject.Inject
 
 
 @Composable
@@ -76,45 +80,80 @@ fun LoginScreen(
     val context = LocalContext.current
     val effect = viewModel.effect.collectAsStateWithLifecycle(null)
 
-    return Box(
+
+    var isError by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(Unit) {
+
+    }
+
+    LaunchedEffect(key1 = effect.value) {
+        if (effect.value != null && effect.value is LoginScreenEffect.ShowError) {
+            isError = (effect.value as LoginScreenEffect.ShowError).message
+        }
+        if (effect.value != null && effect.value is LoginScreenEffect.NavigateToHome) {
+            navToHome()
+        }
+    }
+    Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
         LoginScreenStateful(
             state = screenState.value,
-            effect = effect.value,
             doLogin = { viewModel.doLogin() },
             inputUserName = { viewModel.inputUsername(it) },
             inputPassword = { viewModel.inputPassword(it) },
-            errorDismiss = { viewModel.errorDismiss() },
             navToRegister = navToRegister,
-            navToHome = navToHome
+            navToHome = navToHome,
+            showError = { error -> viewModel.errorArrived(error) }
         )
     }
+
+    if (isError != null) {
+        DialogCompose(
+            text = isError!!,
+            onCloseAction = { viewModel.errorDismiss() },
+            positiveAction = { viewModel.errorDismiss() }
+        )
+    }
+    AnimatedVisibility(
+        visible = screenState.value.isLoading,
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable { },
+        enter = slideInVertically(
+            initialOffsetY = { fullHeight -> -fullHeight },
+        ) + fadeIn(),
+        exit = slideOutVertically(
+            targetOffsetY = { fullHeight -> -fullHeight },
+        ) + fadeOut(),
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.Black.copy(alpha = 0.8f)),
+            contentAlignment = Alignment.Center
+        ) {
+            AtomicLoadingDialog()
+        }
+    }
+
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreenStateful(
     state: LoginScreenState = LoginScreenState(false, false, null, null),
-    effect: LoginScreenEffect? = null,
     doLogin: () -> Unit = {},
     inputUserName: (String) -> Unit = {},
     inputPassword: (String) -> Unit = {},
-    errorDismiss: () -> Unit = {},
+    showError: (String) -> Unit = {},
     navToRegister: () -> Unit = {},
     navToHome: () -> Unit = {}
 ) {
     var isPasswordVisible by remember { mutableStateOf(true) }
     var isEmailError by remember { mutableStateOf<String?>(null) }
-    var isError by remember { mutableStateOf<String?>(null) }
-    LaunchedEffect(key1 = effect) {
-        if (effect != null && effect is LoginScreenEffect.ShowError) {
-            isError = effect.message
-        }
-        if (effect != null && effect is LoginScreenEffect.NavigateToHome) {
-            navToHome()
-        }
-    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -267,7 +306,9 @@ fun LoginScreenStateful(
                 color = Color.Gray,
                 modifier = Modifier
                     .padding(top = 16.dp)
-                    .clickable { /* Handle forgot password */ }
+                    .clickable {
+                        showError("You are not able to reset your password")
+                    }
             )
 
             // Sign Up Text
@@ -302,33 +343,7 @@ fun LoginScreenStateful(
                 )
         )
 
-        AnimatedVisibility(
-            visible = state.isLoading,
-            modifier = Modifier
-                .fillMaxSize()
-                .clickable { },
-            enter = slideInVertically(
-                initialOffsetY = { fullHeight -> -fullHeight },
-            ) + fadeIn(),
-            exit = slideOutVertically(
-                targetOffsetY = { fullHeight -> -fullHeight },
-            ) + fadeOut(),
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = Color.Black.copy(alpha = 0.8f)),
-                contentAlignment = Alignment.Center
-            ) {
-                AtomicLoadingDialog()
-            }
-        }
-        if (isError != null) {
-            DialogCompose(
-                text = isError!!,
-                onCloseAction = { errorDismiss() },
-            )
-        }
+
     }
 }
 

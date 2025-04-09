@@ -1,6 +1,7 @@
 package com.iec.makeup
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -13,7 +14,8 @@ import com.iec.makeup.ui.MakeupApp
 import com.iec.makeup.ui.MakeupAppState
 import com.iec.makeup.ui.theme.MakeupAITheme
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 @AndroidEntryPoint
@@ -30,7 +32,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding)
-                    ){
+                    ) {
                         MakeupApp(
                             navController = navController,
                             appState = appState

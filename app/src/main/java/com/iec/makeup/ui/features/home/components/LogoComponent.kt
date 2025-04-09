@@ -43,12 +43,12 @@ fun LogoComponent() {
             modifier = Modifier
                 .size(50.dp)
         )
-        Text(
-            text = "GlamAura",
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-            fontFamily = FontFamily.Cursive,
-            modifier = Modifier.padding(start = 4.dp)
-        )
+//        Text(
+//            text = "GlamAura",
+//            fontWeight = FontWeight.Bold,
+//            fontSize = 18.sp,
+//            fontFamily = FontFamily.Cursive,
+//            modifier = Modifier.padding(start = 4.dp)
+//        )
     }
 }

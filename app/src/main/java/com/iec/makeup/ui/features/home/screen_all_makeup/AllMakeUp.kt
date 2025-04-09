@@ -1,4 +1,4 @@
-package com.iec.makeup.ui.features.home.see_all_makeup
+package com.iec.makeup.ui.features.home.screen_all_makeup
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -12,13 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.iec.makeup.core.model.mockListData
-import com.iec.makeup.ui.features.home.see_all_makeup.components.HorizontalItemCard
-import com.iec.makeup.ui.features.home.see_all_makeup.components.SearchBar
+import com.iec.makeup.ui.features.home.screen_all_makeup.components.MakeUpItemCard
+import com.iec.makeup.ui.features.home.screen_all_makeup.components.SearchBar
 
 
 @Composable
 fun AllMakeUpScreen(
-    navBack: () -> Unit = {}
+    navBack: () -> Unit = {},
+    navToDetail: (String) -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -28,20 +29,19 @@ fun AllMakeUpScreen(
         }
     ) { padding ->
         Box(
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             val fakeData = mockListData
             LazyColumn {
                 items(fakeData.size) { index ->
                     val item = fakeData[index]
-                    HorizontalItemCard(item = item, onBookNowClick = { /* Handle book now click */ })
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    HorizontalDivider(
-                        modifier = Modifier.padding(horizontal = 16.dp)
+                    MakeUpItemCard(
+                        item = item,
+                        onBookNowClick = { /* Handle book now click */ },
+                        onNavToDetail = navToDetail
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }

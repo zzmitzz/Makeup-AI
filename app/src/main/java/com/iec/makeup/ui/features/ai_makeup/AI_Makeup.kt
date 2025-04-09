@@ -9,14 +9,24 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Description
@@ -31,7 +41,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,10 +61,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.rememberAsyncImagePainter
+import coil3.compose.rememberAsyncImagePainter
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.ai.client.generativeai.type.content
 import com.iec.makeup.R
 import com.iec.makeup.core.ui.AtomicLoadingDialog
 import com.iec.makeup.core.ui.DialogCompose
@@ -65,10 +73,7 @@ import com.iec.makeup.ui.features.ai_makeup.business.AIScreenState
 import com.iec.makeup.ui.features.ai_makeup.business.AIScreenVM
 import com.iec.makeup.ui.features.home.components.LogoComponent
 import com.iec.makeup.ui.theme.ColorDB7093
-import com.iec.makeup.ui.theme.ColorFF69B4
 import com.iec.makeup.ui.theme.ColorFFC1CC
-import com.iec.makeup.ui.theme.ColorFFE4E1
-import com.iec.makeup.ui.theme.ColorFFF0F5
 import java.io.File
 
 
@@ -82,7 +87,7 @@ fun VirtualScreen(
     val viewModel: AIScreenVM = hiltViewModel()
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val state = viewModel.state.collectAsStateWithLifecycle()
-    val effect = viewModel.effect.collectAsState(null)
+    val effect = viewModel.effect.collectAsStateWithLifecycle(null)
 
     /*
      - Handle permission
@@ -91,8 +96,10 @@ fun VirtualScreen(
     // Track if the permission request has been processed after user interaction
     var hasRequestedPermission by rememberSaveable { mutableStateOf(false) }
     var permissionRequestCompleted by rememberSaveable { mutableStateOf(false) }
+
+
     SideEffect {
-        if(!permissionRequestCompleted){
+        if (!permissionRequestCompleted) {
             cameraPermissionState.launchPermissionRequest()
             hasRequestedPermission = true
             permissionRequestCompleted = true
@@ -430,7 +437,8 @@ fun AIMakeupScreen(
             },
             modifier = Modifier
                 .width(100.dp)
-                .height(56.dp),
+                .padding(vertical = 8.dp),
+
             colors = ButtonDefaults.buttonColors(
                 containerColor = ColorFFC1CC
             ),

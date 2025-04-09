@@ -58,7 +58,7 @@ enum class TopLevelDestination(
 // Just rush, not yet implement type safe for this navigation.
 
 sealed class Routes(
-    route: String
+    val route: String
 ) {
 
     /*
@@ -76,47 +76,55 @@ sealed class Routes(
     /*
     -- Route /main/home --
      */
-    data object MainHome : Routes("page1") {
-        fun createRoute() = "main//page1"
+    data object MainHome : Routes("home") {
+        fun createRoute() = "home"
     }
 
-    data object MainNotification : Routes("notification") {
-        fun createRoute() = "maidn/notification"
+    data object MainNotification : Routes("home/notification") {
+        fun createRoute() = "home/notification"
     }
 
-    data object MainSearch : Routes("search") {
-        fun createRoute() = "main/search"
+    data object MainSearch : Routes("home/search") {
+        fun createRoute() = "home/search"
     }
 
-    data object MainAllMakeUp : Routes("all_makeup") {
-        fun createRoute() = "main/all_makeup"
+    data object MainAllMakeUp : Routes("home/all_makeup") {
+        fun createRoute() = "home/all_makeup"
+    }
+
+    data object MainDetailMakeUp : Routes("home/detail/{${MakeUpStylistID}}") {
+        fun createRoute(makeupStylistID: String) = "home/detail/$makeupStylistID"
+    }
+
+    data object MainChatting : Routes("home/chat/{${MakeUpStylistID}}") {
+        fun createRoute(makeupStylistID: String) = "home/chat/$makeupStylistID"
     }
 
 
     /*
     -- Route /main/ai --
      */
-    data object Page2 : Routes("page2") {
-        fun createRoute() = "main/ai/page2"
+    data object Page2 : Routes("analyze") {
+        fun createRoute() = "analyze"
     }
 
     data object InstructionScreen : Routes("instruction") {
-        fun createRoute() = "main/ai/instruction"
+        fun createRoute() = "analyze/instruction"
     }
 
 
     /*
     -- Route page3
      */
-    data object Page3 : Routes("page3") {
-        fun createRoute() = "main/page3"
+    data object Page3 : Routes("shopping") {
+        fun createRoute() = "shopping"
     }
 
-    data object Page4 : Routes("page4") {
-        fun createRoute() = "main/page4"
+    data object Page4 : Routes("account") {
+        fun createRoute() = "account"
     }
 
     companion object {
-//        const val
+        val MakeUpStylistID = "makeup_stylist_id"
     }
 }

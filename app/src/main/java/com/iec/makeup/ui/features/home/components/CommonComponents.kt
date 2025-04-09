@@ -34,8 +34,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -202,12 +205,16 @@ fun StunningRoundedCard(
     title: String = "Nguyen Van A",
     subtitle: String = "100+ books this month",
     buttonText: String = "See details",
-    onButtonClick: () -> Unit = {}
+    onButtonClick: () -> Unit = {},
+    onItemClick: (String) -> Unit = {}
 ) {
     Card(
         modifier = Modifier
-            .padding(16.dp)
-            .width(200.dp),
+            .padding(8.dp)
+            .width(120.dp)
+            .clickable{
+                onItemClick(title)
+            },
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(0.dp),
         colors = CardDefaults.cardColors(
@@ -221,7 +228,7 @@ fun StunningRoundedCard(
             // Image with rounded corners on top
             Box(
                 modifier = Modifier
-                    .height(140.dp)
+                    .height(160.dp)
                     .fillMaxWidth(),
                 contentAlignment = Alignment.BottomCenter
             ) {
@@ -234,32 +241,32 @@ fun StunningRoundedCard(
                     onLoading = {
                     }
                 )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    Color.White
-                                )
-                            )
-                        )
-                )
+//                Box(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(100.dp)
+//                        .background(
+//                            brush = Brush.verticalGradient(
+//                                colors = listOf(
+//                                    Color.Transparent,
+//                                    Color.White
+//                                )
+//                            )
+//                        )
+//                )
             }
 
             // Content padding
             Column(
-                modifier = Modifier.padding(16.dp)
+                modifier = Modifier.padding(8.dp)
             ) {
                 // Title
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = title,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontSize = 12.sp,
                     color = Color.Black,
+                    fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
 
@@ -268,9 +275,15 @@ fun StunningRoundedCard(
                     text = subtitle,
                     fontSize = 12.sp,
                     color = Color.Gray,
-                    textAlign = TextAlign.Center,
+                    textAlign = TextAlign.Start,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    letterSpacing = 0.5.sp,
+                    style = TextStyle(
+                        lineHeight = 16.sp
+                    ),
                     modifier = Modifier
-                        .padding(top = 8.dp)
+                        .padding(vertical = 4.dp)
                         .fillMaxWidth()
                 )
 
@@ -291,9 +304,9 @@ fun StunningRoundedCard(
                     ) {
                         Text(
                             modifier = Modifier
-                                .padding(horizontal = 12.dp, vertical = 8.dp),
+                                .padding(horizontal = 8.dp, vertical = 4.dp),
                             text = buttonText,
-                            fontSize = 12.sp,
+                            fontSize = 11.sp,
                             fontWeight = FontWeight.Medium,
                             color = Color.White
                         )

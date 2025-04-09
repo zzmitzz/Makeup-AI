@@ -34,12 +34,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.fontResource
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.iec.makeup.R
 import com.iec.makeup.core.model.mockListData
+import com.iec.makeup.core.utils.DateTimeUtils
+import com.iec.makeup.core.utils.DateTimeUtils.isMorning
 import com.iec.makeup.ui.features.home.components.OrderStatusChips
 import com.iec.makeup.ui.features.home.components.StoriesItems
 import com.iec.makeup.ui.features.home.components.StunningRoundedCard
@@ -48,7 +53,6 @@ import com.iec.makeup.ui.features.home.helpers.OrderStatusType
 import com.iec.makeup.ui.theme.ColorDB7093
 import com.iec.makeup.ui.theme.ColorFF69B4
 import com.iec.makeup.ui.theme.ColorFFC1CC
-
 
 
 /*
@@ -60,13 +64,17 @@ import com.iec.makeup.ui.theme.ColorFFC1CC
 fun HomeScreen(
     navToNotification: () -> Unit = {},
     navToSearch: () -> Unit = {},
-    navToAllMakeUp: () -> Unit = {}
+    navToAllMakeUp: () -> Unit = {},
+    navToPersonalInfo: (String) -> Unit = {},
+    navToChatting: () -> Unit = {}
 ) {
     val context = LocalContext.current
     AuraBeautyApp(
         navToNotification = navToNotification,
         navToSearch = navToSearch,
-        navToAllMakeUp = navToAllMakeUp
+        navToAllMakeUp = navToAllMakeUp,
+        navToPersonalInfo = navToPersonalInfo,
+        navToChatting = navToChatting
     )
 }
 
@@ -75,10 +83,12 @@ fun HomeScreen(
 fun AuraBeautyApp(
     navToNotification: () -> Unit = {},
     navToSearch: () -> Unit = {},
-    navToAllMakeUp: () -> Unit = {}
+    navToAllMakeUp: () -> Unit = {},
+    navToPersonalInfo: (String) -> Unit = {},
+    navToChatting: () -> Unit = {}
 ) {
     val scrollview = rememberScrollState()
-    val orderChipSelected = remember {mutableStateOf<OrderStatusType>(OrderStatusType.TO_RECEIVE)}
+    val orderChipSelected = remember { mutableStateOf<OrderStatusType>(OrderStatusType.TO_RECEIVE) }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -90,7 +100,8 @@ fun AuraBeautyApp(
         Column(modifier = Modifier.fillMaxSize()) {
             // Top Bar
             TopAppBar(
-                showNotifications = navToNotification
+                showNotifications = navToNotification,
+                showChat = navToChatting
             )
             // Content
             Column(
@@ -104,13 +115,27 @@ fun AuraBeautyApp(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "Hello, Juliet!",
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.Cursive,
-                        modifier = Modifier.padding(vertical = 16.dp)
-                    )
+                    if (DateTimeUtils.getCurrentDateTime().isMorning()) {
+                        Text(
+                            text = "Good morning, IEC!",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily(
+                                Font(R.font.montserrat)
+                            ),
+                            modifier = Modifier.padding(vertical = 16.dp)
+                        )
+                    } else {
+                        Text(
+                            text = "Good noon, IEC!",
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily(
+                                Font(R.font.montserrat)
+                            ),
+                            modifier = Modifier.padding(vertical = 16.dp)
+                        )
+                    }
                     Icon(
                         imageVector = Icons.Default.Search,
                         tint = ColorFF69B4,
@@ -125,7 +150,7 @@ fun AuraBeautyApp(
                     text = "Orders",
                     fontWeight = FontWeight.Medium,
                     fontSize = 18.sp,
-                    modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+                    modifier = Modifier.padding(bottom = 12.dp)
                 )
                 // Order Status Chips
                 OrderStatusChips(
@@ -142,69 +167,73 @@ fun AuraBeautyApp(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Card(
-                    modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
                     shape = RoundedCornerShape(16.dp),
                     elevation = CardDefaults.elevatedCardElevation(0.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = ColorDB7093
                     )
                 ) {
-                   Box(
-                       modifier = Modifier.fillMaxSize(),
-                       contentAlignment = Alignment.Center
-                   ){
-                       when(orderChipSelected.value) {
-                           OrderStatusType.TO_PAY -> {
-                               Text(
-                                   text = "You have 1 order to pay",
-                                   fontWeight = FontWeight.Bold,
-                                   color = Color.White,
-                                   fontSize = 12.sp,
-                                   modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
-                               )
-                           }
-                           OrderStatusType.TO_RECEIVE -> {
-                               Text(
-                                   text = "You have 1 order to receive",
-                                   fontWeight = FontWeight.Bold,
-                                   color = Color.White,
-                                   fontSize = 12.sp,
-                                   modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
-                               )
-                           }
-                           OrderStatusType.TO_REVIEW -> {
-                               Text(
-                                   text = "You have 1 order to review",
-                                   fontWeight = FontWeight.Bold,
-                                   color = Color.White,
-                                   fontSize = 12.sp,
-                                   modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
-                               )
-                           }
-                       }
-                   }
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        when (orderChipSelected.value) {
+                            OrderStatusType.TO_PAY -> {
+                                Text(
+                                    text = "You have 1 order to pay",
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                    fontSize = 12.sp,
+                                    modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+                                )
+                            }
+
+                            OrderStatusType.TO_RECEIVE -> {
+                                Text(
+                                    text = "You have 1 order to receive",
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                    fontSize = 12.sp,
+                                    modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+                                )
+                            }
+
+                            OrderStatusType.TO_REVIEW -> {
+                                Text(
+                                    text = "You have 1 order to review",
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color.White,
+                                    fontSize = 12.sp,
+                                    modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+                                )
+                            }
+                        }
+                    }
                 }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Reels",
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
-                    )
-                    Text(
-                        text = "See all >",
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 14.sp,
-                        color = ColorFF69B4,
-                        modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
-                    )
-                }
-                // Stories Items
-                StoriesItems()
+//                Row(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    horizontalArrangement = Arrangement.SpaceBetween,
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    Text(
+//                        text = "Reels",
+//                        fontWeight = FontWeight.Medium,
+//                        fontSize = 18.sp,
+//                        modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+//                    )
+//                    Text(
+//                        text = "See all >",
+//                        fontWeight = FontWeight.Medium,
+//                        fontSize = 14.sp,
+//                        color = ColorFF69B4,
+//                        modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+//                    )
+//                }
+//                // Stories Items
+//                StoriesItems()
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -222,9 +251,11 @@ fun AuraBeautyApp(
                         fontWeight = FontWeight.Medium,
                         fontSize = 14.sp,
                         color = ColorFF69B4,
-                        modifier = Modifier.padding(top = 12.dp, bottom = 12.dp).clickable {
-                            navToAllMakeUp()
-                        }
+                        modifier = Modifier
+                            .padding(top = 12.dp, bottom = 12.dp)
+                            .clickable {
+                                navToAllMakeUp()
+                            }
                     )
                 }
                 val listMock = mockListData
@@ -239,6 +270,9 @@ fun AuraBeautyApp(
                                 if (listMock[index].isAvailable) {
                                     // Handle book now action
                                 }
+                            },
+                            onItemClick = {
+                                navToPersonalInfo(it)
                             }
                         )
                     }

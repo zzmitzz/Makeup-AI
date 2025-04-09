@@ -1,7 +1,6 @@
-package com.iec.makeup.ui.features.home.search
+package com.iec.makeup.ui.features.home.screen_search
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.runtime.Composable
 
@@ -11,11 +10,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.iec.makeup.core.ui.IECTextField
 import com.iec.makeup.ui.theme.ColorDB7093
 import kotlinx.coroutines.launch
 
@@ -40,16 +37,21 @@ fun SearchScreen(
     )
     val coroutineScope = rememberCoroutineScope()
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally) {
         // Top app bar with search
         Row(
+            modifier = Modifier.padding(
+                horizontal = 8.dp,
+            ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
                 imageVector = Icons.Default.ArrowBackIosNew,
                 contentDescription = "Back",
                 modifier = Modifier
-                    .padding(8.dp).clickable {
+                    .size(24.dp)
+                    .clickable {
                         navBack()
                     }
             )
@@ -65,7 +67,7 @@ fun SearchScreen(
             modifier = Modifier.fillMaxWidth(),
             selectedTabIndex = pagerState.currentPage,
             contentColor = ColorDB7093,
-            edgePadding = 0.dp
+            edgePadding = 8.dp,
         ) {
             tabs.forEachIndexed { index, title ->
                 Tab(
@@ -82,7 +84,6 @@ fun SearchScreen(
 
         // Content pager
         HorizontalPager(
-
             state = pagerState,
             modifier = Modifier.weight(1f)
         ) { page ->
@@ -115,37 +116,13 @@ fun SearchTopBar(
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                androidx.compose.material.OutlinedTextField(
+                IECTextField(
+                    placeholder = "Search ...",
                     value = searchQuery,
                     onValueChange = onSearchQueryChange,
-
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(50.dp)
-                        .border(0.dp, Color.LightGray.copy(alpha = 0.4f)),
-                    placeholder = { Text("Search...") },
-                    singleLine = true,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = Color.Transparent,
-                        unfocusedBorderColor = Color.Transparent,
-                        backgroundColor = Color.LightGray.copy(alpha = 0.2f)
-                    ),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Search Icon"
-                        )
-                    },
-                    trailingIcon = {
-                        if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = onClearClick) {
-                                Icon(
-                                    imageVector = Icons.Default.Clear,
-                                    contentDescription = "Clear Search"
-                                )
-                            }
-                        }
-                    }
+                        .height(40.dp)
+                        .padding(start = 8.dp)
                 )
             }
         }

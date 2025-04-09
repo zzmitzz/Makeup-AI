@@ -2,23 +2,26 @@ package com.iec.makeup.ui.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.navArgument
+import com.example.iec.ui.feature.main.message.box_chat_message.ModernChatScreen
+import com.iec.makeup.core.model.MakeUpStylist
 import com.iec.makeup.ui.MakeupAppState
 import com.iec.makeup.ui.features.ai_makeup.InstructionScreen
 import com.iec.makeup.ui.features.ai_makeup.VirtualScreen
 import com.iec.makeup.ui.features.authentication.login.LoginScreen
 import com.iec.makeup.ui.features.authentication.register.RegisterScreen
 import com.iec.makeup.ui.features.home.HomeScreen
-import com.iec.makeup.ui.features.home.notification.NotificationContent
-import com.iec.makeup.ui.features.home.search.SearchScreen
-import com.iec.makeup.ui.features.home.see_all_makeup.AllMakeUpScreen
+import com.iec.makeup.ui.features.home.screen_notification.NotificationContent
+import com.iec.makeup.ui.features.home.screen_search.SearchScreen
+import com.iec.makeup.ui.features.home.screen_all_makeup.AllMakeUpScreen
+import com.iec.makeup.ui.features.home.screen_makeup_info.ProfileScreen
 
 
 @Composable
@@ -29,7 +32,7 @@ fun NavigationGraph(
     NavHost(navController = navController, startDestination = "auth") {
 
         navigation(
-            startDestination = Routes.Login.createRoute(),
+            startDestination = Routes.Login.route,
             route = "auth"
         ) {
             composable(
@@ -76,13 +79,13 @@ fun NavigationGraph(
         }
         // For type-safety, since the project is current in development then we will not implement this
         navigation(
-            startDestination = Routes.MainHome.createRoute(),
+            startDestination = Routes.MainHome.route,
             route = "main"
         ) {
             /*
               - Main Route
              */
-            composable(route = Routes.MainHome.createRoute()) {
+            composable(route = Routes.MainHome.route) {
                 appState.setVisibleBottomNav(true)
                 HomeScreen(
                     navToNotification = {
@@ -99,6 +102,18 @@ fun NavigationGraph(
                     },
                     navToAllMakeUp = {
                         navController.navigate(Routes.MainAllMakeUp.createRoute()) {
+                            launchSingleTop = true
+                            restoreState = false
+                        }
+                    },
+                    navToPersonalInfo = { id ->
+                        navController.navigate(Routes.MainDetailMakeUp.createRoute(id)) {
+                            launchSingleTop = true
+                            restoreState = false
+                        }
+                    },
+                    navToChatting = {
+                        navController.navigate(Routes.MainChatting.createRoute("0")) {
                             launchSingleTop = true
                             restoreState = false
                         }
@@ -125,7 +140,7 @@ fun NavigationGraph(
                 )
             }
             composable(
-                route = Routes.MainSearch.createRoute(),
+                route = Routes.MainSearch.route,
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Up,
@@ -144,7 +159,7 @@ fun NavigationGraph(
                 )
             }
             composable(
-                route = Routes.MainAllMakeUp.createRoute(),
+                route = Routes.MainAllMakeUp.route,
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Right,
@@ -158,10 +173,39 @@ fun NavigationGraph(
                     )
                 }) {
                 AllMakeUpScreen(
+                    navBack = { navController.popBackStack() },
+                    navToDetail = {
+                        navController.navigate(Routes.MainDetailMakeUp.createRoute(it))
+                    }
+                )
+            }
+
+            composable(
+                route = Routes.MainDetailMakeUp.route,
+                arguments = listOf(
+                    navArgument(Routes.MakeUpStylistID) { type = NavType.StringType }
+                )
+            ) {
+                val idMakeUp = it.arguments?.getString(Routes.MakeUpStylistID) ?: "0"
+                ProfileScreen(
+                    id = idMakeUp,
                     navBack = { navController.popBackStack() }
                 )
             }
 
+            composable(
+                route = Routes.MainChatting.route,
+                arguments = listOf(
+                    navArgument(Routes.MakeUpStylistID) { type = NavType.StringType }
+                )
+            ) {
+                appState.setVisibleBottomNav(false)
+                val idMakeUp = it.arguments?.getString(Routes.MakeUpStylistID) ?: "0"
+                ModernChatScreen(
+                    userName = idMakeUp,
+                    onBackPress = { navController.popBackStack() }
+                )
+            }
 
             /*
              - AI_Screen Route
