@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -98,6 +97,23 @@ fun VirtualScreen(
     var permissionRequestCompleted by rememberSaveable { mutableStateOf(false) }
 
 
+    val file = File(context.cacheDir, "captured_image.jpg")
+    val uri = FileProvider.getUriForFile(
+        context,
+        "${context.packageName}.provider",
+        file
+    )
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success) {
+            viewModel.captureImage(uri ?: Uri.EMPTY)
+        } else {
+            viewModel.showError("Image capture failed")
+        }
+    }
+
     SideEffect {
         if (!permissionRequestCompleted) {
             cameraPermissionState.launchPermissionRequest()
@@ -127,16 +143,12 @@ fun VirtualScreen(
     }
     AIMakeupScreen(
         navInstruction,
-        context = context,
         state = state.value,
         uploadImage = viewModel::uploadImage,
-        capturePicture = viewModel::captureImage,
         onApply = viewModel::onDeleteImage,
         inputDescription = viewModel::inputDescription,
+        launchCamera = {cameraLauncher.launch(uri)},
         deletePicture = viewModel::onDeleteImage,
-        showLoading = viewModel::showLoadingDialog,
-        hideLoading = viewModel::hideLoadingDialog,
-        showError = viewModel::showError
     )
     if (state.value.isLoading) {
         Box(
@@ -175,38 +187,18 @@ private fun AIPreview() {
 @Composable
 fun AIMakeupScreen(
     navInstruction: () -> Unit = {},
-    showError: (String) -> Unit = {},
-    showLoading: () -> Unit = {},
-    hideLoading: () -> Unit = {},
-    context: Context = LocalContext.current,
     state: AIScreenState = AIScreenState(),
     uploadImage: (uri: Uri) -> Unit = {},
-    capturePicture: (uri: Uri) -> Unit = {},
     deletePicture: () -> Unit = {},
     inputDescription: (description: String) -> Unit = {},
-    onApply: () -> Unit = {}
+    onApply: () -> Unit = {},
+    launchCamera: () -> Unit = {}
 ) {
 
-    val file = File(context.cacheDir, "captured_image.jpg")
-    val uri = FileProvider.getUriForFile(
-        context,
-        "${context.packageName}.provider",
-        file
-    )
-
-    val cameraLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.TakePicture()
-    ) { success ->
-        if (success) {
-            capturePicture(uri ?: Uri.EMPTY)
-        } else {
-            showError("Image capture failed")
-        }
-    }
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFFFF5F8))
+            .background(Color.White)
             .padding(bottom = 16.dp), // Light pink background for the entire app
         contentAlignment = Alignment.BottomCenter,
     ) {
@@ -352,7 +344,7 @@ fun AIMakeupScreen(
                                     contentDescription = "Play",
                                     tint = Color.DarkGray,
                                     modifier = Modifier.clickable {
-                                        cameraLauncher.launch(uri)
+                                        launchCamera()
                                     }
                                 )
                                 Icon(

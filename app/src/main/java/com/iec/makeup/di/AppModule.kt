@@ -7,8 +7,10 @@ import com.iec.makeup.core.PreferenceKeys
 import com.iec.makeup.core.utils.Constants.BASE_URL
 import com.iec.makeup.core.utils.Constants.TIME_OUT
 import com.iec.makeup.data.remote.api.AuthEndpoint
+import com.iec.makeup.data.remote.repository.MessageChatRemoteImpl
 import com.iec.makeup.data.repository.AuthRepository
 import com.iec.makeup.data.repository.AuthRepositoryImpl
+import com.iec.makeup.data.repository.MessageChatRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -77,4 +79,7 @@ abstract class ImplementationsModule {
 
     @Binds
     abstract fun bindDataStore(dataStore: PersistentState): DataStoreInterface
+
+    @Binds
+    abstract fun bindMessageChatRepository(messageChatRepositoryImpl: MessageChatRemoteImpl): MessageChatRepository
 }

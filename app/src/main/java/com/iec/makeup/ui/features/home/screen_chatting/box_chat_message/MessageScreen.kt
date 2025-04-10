@@ -73,7 +73,7 @@ fun ModernChatScreen(
                 messageText = uiState.value.userInput ?: "",
                 onMessageChange = { viewModel.onMessageChange(it) },
                 onMessageSent = {
-                    keyboardController?.hide()
+//                    keyboardController?.hide()
                     viewModel.onSendMessage()
                     viewModel.onMessageChange("")
                 },

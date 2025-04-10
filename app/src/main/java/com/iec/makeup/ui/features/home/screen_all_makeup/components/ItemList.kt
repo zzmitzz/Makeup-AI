@@ -91,20 +91,28 @@ fun MakeUpItemCard(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 // Rating
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Filled.Star,
-                        contentDescription = "Rating Star",
-                        tint = Color.Yellow,
-                        modifier = Modifier.size(20.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = item.rating.toString(),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        color = Color.Black // Or MaterialTheme.colorScheme.onSurface
-                    )
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = ColorDB7093
+                    ),
+                    shape = RoundedCornerShape(4.dp),
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)) {
+                        Icon(
+                            imageVector = Icons.Filled.Star,
+                            contentDescription = "Rating Star",
+                            tint = Color.Yellow,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = item.rating.toString(),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = Color.White // Or MaterialTheme.colorScheme.onSurface
+                        )
+                    }
                 }
             }
 

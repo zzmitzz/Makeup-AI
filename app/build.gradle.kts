@@ -149,4 +149,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.coil.kt.coil.compose)
+    implementation(libs.socket.io.client)
+
 }

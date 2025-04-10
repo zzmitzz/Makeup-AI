@@ -42,13 +42,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.iec.makeup.R
+import com.iec.makeup.core.model.User
 import com.iec.makeup.core.model.mockListData
 import com.iec.makeup.core.utils.DateTimeUtils
 import com.iec.makeup.core.utils.DateTimeUtils.isMorning
+import com.iec.makeup.ui.features.home.components.AutoScrollingHorizontalCardList
+import com.iec.makeup.ui.features.home.components.FollowerStoryList
 import com.iec.makeup.ui.features.home.components.OrderStatusChips
 import com.iec.makeup.ui.features.home.components.StoriesItems
 import com.iec.makeup.ui.features.home.components.StunningRoundedCard
 import com.iec.makeup.ui.features.home.components.TopAppBar
+import com.iec.makeup.ui.features.home.components.getSampleCardData
 import com.iec.makeup.ui.features.home.helpers.OrderStatusType
 import com.iec.makeup.ui.theme.ColorDB7093
 import com.iec.makeup.ui.theme.ColorFF69B4
@@ -147,11 +151,38 @@ fun AuraBeautyApp(
                 }
                 // My Orders Section
                 Text(
-                    text = "Orders",
+                    text = "Upcoming Lives",
                     fontWeight = FontWeight.Medium,
                     fontSize = 18.sp,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
+                AutoScrollingHorizontalCardList(
+                    items = getSampleCardData()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Following",
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    FollowerStoryList(
+                        users = listOf(
+                            User(1, "user1", "zzmitzz"),
+                            User(2, "user2", "zxmitzz"),
+                            User(3, "user3", "Lmao")
+                        )
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Booking",
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 18.sp,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+
                 // Order Status Chips
                 OrderStatusChips(
                     viewToPay = {
@@ -193,7 +224,7 @@ fun AuraBeautyApp(
 
                             OrderStatusType.TO_RECEIVE -> {
                                 Text(
-                                    text = "You have 1 order to receive",
+                                    text = "You have 1 book to receive",
                                     fontWeight = FontWeight.Bold,
                                     color = Color.White,
                                     fontSize = 12.sp,
@@ -241,7 +272,7 @@ fun AuraBeautyApp(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "Booking",
+                        text = "Artist",
                         fontWeight = FontWeight.Medium,
                         fontSize = 18.sp,
                         modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
