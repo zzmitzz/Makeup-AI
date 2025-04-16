@@ -1,4 +1,4 @@
-package com.iec.makeup.core.model
+package com.iec.makeup.core.model.ui
 
 import kotlinx.serialization.Serializable
 

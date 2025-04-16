@@ -1,7 +1,7 @@
 package com.iec.makeup.ui.features.home.screen_all_makeup.components
 
 import androidx.compose.runtime.Composable
-import com.iec.makeup.core.model.MakeUpStylist
+import com.iec.makeup.core.model.ui.MakeUpStylist
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,16 +17,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.iec.makeup.ui.theme.ColorDB7093
-import com.iec.makeup.ui.theme.ColorFFC1CC
-import com.iec.makeup.ui.theme.ColorFFE4E1
 import com.iec.makeup.ui.theme.ColorFFF0F5
-import com.iec.makeup.ui.theme.DarkOutline
 
 @Composable
 fun MakeUpItemCard(
@@ -37,7 +33,7 @@ fun MakeUpItemCard(
 ) {
     Card(
         shape = RoundedCornerShape(8.dp),
-        modifier = modifier.clickable{
+        modifier = modifier.clickable {
             onNavToDetail(item.name)
         },
         colors = CardDefaults.cardColors(containerColor = ColorFFF0F5),
@@ -97,8 +93,10 @@ fun MakeUpItemCard(
                     ),
                     shape = RoundedCornerShape(4.dp),
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.Star,
                             contentDescription = "Rating Star",

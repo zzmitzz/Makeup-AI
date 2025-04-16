@@ -11,7 +11,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.example.iec.ui.feature.main.message.box_chat_message.ModernChatScreen
-import com.iec.makeup.core.model.MakeUpStylist
 import com.iec.makeup.ui.MakeupAppState
 import com.iec.makeup.ui.features.ai_makeup.InstructionScreen
 import com.iec.makeup.ui.features.ai_makeup.VirtualScreen
