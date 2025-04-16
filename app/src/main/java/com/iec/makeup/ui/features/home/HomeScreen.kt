@@ -32,6 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.fontResource
@@ -101,11 +102,27 @@ fun AuraBeautyApp(
                 scrollview
             )
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .height(200.dp)
+                .fillMaxWidth()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            ColorDB7093,
+                            Color.White
+                        )
+                    ),
+                )
+        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+        ) {
             // Top Bar
             TopAppBar(
                 showNotifications = navToNotification,
-                showChat = navToChatting
+                showChat = navToChatting,
+                showSearch = navToSearch
             )
             // Content
             Column(
@@ -113,49 +130,6 @@ fun AuraBeautyApp(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             ) {
-                // Greeting card
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    if (DateTimeUtils.getCurrentDateTime().isMorning()) {
-                        Text(
-                            text = "Good morning, IEC!",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            fontFamily = FontFamily(
-                                Font(R.font.montserrat)
-                            ),
-                            modifier = Modifier.padding(vertical = 16.dp)
-                        )
-                    } else {
-                        Text(
-                            text = "Good noon, IEC!",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            fontFamily = FontFamily(
-                                Font(R.font.montserrat)
-                            ),
-                            modifier = Modifier.padding(vertical = 16.dp)
-                        )
-                    }
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        tint = ColorFF69B4,
-                        contentDescription = "",
-                        modifier = Modifier.clickable {
-                            navToSearch()
-                        }
-                    )
-                }
-                // My Orders Section
-                Text(
-                    text = "Upcoming Lives",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(bottom = 12.dp)
-                )
                 AutoScrollingHorizontalCardList(
                     items = getSampleCardData()
                 )
@@ -265,7 +239,35 @@ fun AuraBeautyApp(
 //                }
 //                // Stories Items
 //                StoriesItems()
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Makeup Layout",
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 18.sp,
+                        modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+                    )
+                    Text(
+                        text = "See all >",
+                        fontWeight = FontWeight.Medium,
+                        fontSize = 14.sp,
+                        color = ColorFF69B4,
+                        modifier = Modifier
+                            .padding(top = 12.dp, bottom = 12.dp)
+                            .clickable {
+                                navToAllMakeUp()
+                            }
+                    )
+                }
 
+                val listMock = mockListData
+                LazyRow {
+
+                }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -289,7 +291,6 @@ fun AuraBeautyApp(
                             }
                     )
                 }
-                val listMock = mockListData
                 LazyRow {
                     items(listMock.size) { index ->
                         StunningRoundedCard(

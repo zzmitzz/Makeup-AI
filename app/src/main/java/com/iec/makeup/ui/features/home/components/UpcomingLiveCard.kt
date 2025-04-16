@@ -145,8 +145,8 @@ fun AutoScrollingHorizontalCardList(
                 val currentFirstVisibleOffset = lazyListState.firstVisibleItemScrollOffset
 
                 // Calculate the next index, wrapping around if necessary
-                val nextIndex = (currentFirstVisibleIndex + 1) % itemCount
-
+                var nextIndex = (currentFirstVisibleIndex + 1) % itemCount
+                if (nextIndex == itemCount - 1) nextIndex = 0
                 // If the first item is partially visible, scroll fully to it first,
                 // then scroll to the next one. Otherwise, just scroll to the next.
                 if (currentFirstVisibleOffset > 0) {
