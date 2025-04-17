@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.example.iec.ui.feature.main.message.box_chat_message.ModernChatScreen
 import com.iec.makeup.core.model.ui.MakeUpTemplateLayout
 import com.iec.makeup.core.model.ui.mockMakeUpTemplateLayout
@@ -21,6 +22,7 @@ import com.iec.makeup.ui.features.ai_makeup.screen_response_ai.InteractionScreen
 import com.iec.makeup.ui.features.ai_makeup.screen_response_ai.InteractionScreenStateful
 import com.iec.makeup.ui.features.authentication.login.LoginScreen
 import com.iec.makeup.ui.features.authentication.register.RegisterScreen
+import com.iec.makeup.ui.features.authentication.third_party_auth.GoogleAuthLoadingScreen
 import com.iec.makeup.ui.features.home.HomeScreen
 import com.iec.makeup.ui.features.home.screen_notification.NotificationContent
 import com.iec.makeup.ui.features.home.screen_search.SearchScreen
@@ -45,6 +47,32 @@ fun NavigationGraph(
     appState: MakeupAppState
 ) {
     NavHost(navController = navController, startDestination = "auth") {
+
+        composable(
+            route = "login-success?code={tempCode}",
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = "makeup://login-success?code={tempCode}"
+                }
+            ),
+            arguments = listOf(
+                navArgument("code") { nullable = true }
+            )
+        ) {
+            appState.setVisibleBottomNav(false)
+            GoogleAuthLoadingScreen(
+                navToHome = {
+                    navController.navigate("main") {
+                        popUpTo("auth") {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                        restoreState = false
+                    }
+                },
+                navBack = { navController.popBackStack() }
+            )
+        }
 
         navigation(
             startDestination = Routes.Login.route,

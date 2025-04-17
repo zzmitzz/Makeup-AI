@@ -151,4 +151,12 @@ dependencies {
     implementation(libs.coil.kt.coil.compose)
     implementation(libs.socket.io.client)
 
+    // Google SDK for authentication
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+//    implementation(libs.googleid)
+
+    // Browser
+    implementation(libs.androidx.browser)
+
 }

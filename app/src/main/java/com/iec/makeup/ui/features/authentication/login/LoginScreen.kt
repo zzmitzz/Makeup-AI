@@ -1,10 +1,13 @@
 package com.iec.makeup.ui.features.authentication.login
 
+import android.graphics.Paint.Align
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,9 +20,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -29,6 +34,8 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -49,16 +56,21 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.iec.makeup.R
 import com.iec.makeup.core.ui.AtomicLoadingDialog
 import com.iec.makeup.core.ui.DialogCompose
+import com.iec.makeup.core.utils.Constants.BASE_URL
 import com.iec.makeup.core.utils.validatesEmailPattern
 import com.iec.makeup.ui.theme.Color33FF69B4
 import com.iec.makeup.ui.theme.ColorDB7093
@@ -68,6 +80,9 @@ import com.iec.makeup.ui.theme.ColorFFE4E1
 import com.iec.makeup.ui.theme.ColorFFF0F5
 import qrcode.color.Colors
 import javax.inject.Inject
+
+
+const val signInGoogleURL = "${BASE_URL}auth/google"
 
 
 @Composable
@@ -80,13 +95,11 @@ fun LoginScreen(
     val context = LocalContext.current
     val effect = viewModel.effect.collectAsStateWithLifecycle(null)
 
-
     var isError by remember { mutableStateOf<String?>(null) }
 
-    LaunchedEffect(Unit) {
-
+    val openBrowser = {
+        CustomTabsIntent.Builder().build().launchUrl(context, signInGoogleURL.toUri())
     }
-
     LaunchedEffect(key1 = effect.value) {
         if (effect.value != null && effect.value is LoginScreenEffect.ShowError) {
             isError = (effect.value as LoginScreenEffect.ShowError).message
@@ -106,7 +119,8 @@ fun LoginScreen(
             inputPassword = { viewModel.inputPassword(it) },
             navToRegister = navToRegister,
             navToHome = navToHome,
-            showError = { error -> viewModel.errorArrived(error) }
+            showError = { error -> viewModel.errorArrived(error) },
+            openGoogleSignIn = openBrowser
         )
     }
 
@@ -150,7 +164,8 @@ fun LoginScreenStateful(
     inputPassword: (String) -> Unit = {},
     showError: (String) -> Unit = {},
     navToRegister: () -> Unit = {},
-    navToHome: () -> Unit = {}
+    navToHome: () -> Unit = {},
+    openGoogleSignIn: () -> Unit = {}
 ) {
     var isPasswordVisible by remember { mutableStateOf(true) }
     var isEmailError by remember { mutableStateOf<String?>(null) }
@@ -176,7 +191,7 @@ fun LoginScreenStateful(
         ) {
             // App Logo/Title
             Text(
-                text = "GlowAura",
+                text = "GlamAura",
                 style = MaterialTheme.typography.h3.copy(
                     fontWeight = FontWeight.Bold,
                     fontSize = 40.sp
@@ -328,6 +343,62 @@ fun LoginScreenStateful(
                         navToRegister()
                     }
                 )
+            }
+
+            Row(
+                modifier = Modifier
+                    .padding(top = 32.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Divider(
+                    modifier = Modifier.width(100.dp)
+                )
+                Text(
+                    text = "or continue with",
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    fontSize = 14.sp,
+                    color = Color.DarkGray
+                )
+                Divider(
+                    modifier = Modifier.width(100.dp)
+                )
+//
+            }
+            Spacer(Modifier.height(16.dp))
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp, horizontal = 12.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = Color.White
+                )
+            ) {
+                Box(
+                    modifier = Modifier
+                        .clickable {
+                            openGoogleSignIn()
+                        }
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.google),
+                        contentDescription = "Google",
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .size(24.dp)
+                    )
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.Center),
+                        text = "Đăng nhập với Google",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
 
