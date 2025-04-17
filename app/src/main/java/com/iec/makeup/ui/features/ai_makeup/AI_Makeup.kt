@@ -26,6 +26,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Description
@@ -73,6 +74,7 @@ import com.iec.makeup.ui.features.ai_makeup.business.AIScreenVM
 import com.iec.makeup.ui.features.home.components.LogoComponent
 import com.iec.makeup.ui.theme.ColorDB7093
 import com.iec.makeup.ui.theme.ColorFFC1CC
+import com.iec.makeup.ui.theme.ColorFFE4E1
 import java.io.File
 
 
@@ -80,7 +82,10 @@ import java.io.File
 @Composable
 fun VirtualScreen(
     navBack: () -> Unit = {},
-    navInstruction: () -> Unit = {}
+    initialPrompts: String = "",
+    randomList: List<String>? = null,
+    navInstruction: () -> Unit = {},
+    navInteraction: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
     val viewModel: AIScreenVM = hiltViewModel()
@@ -128,7 +133,14 @@ fun VirtualScreen(
         }
     }
 
-
+    LaunchedEffect(Unit) {
+        if (initialPrompts.isNotEmpty()) {
+            viewModel.onInitData(
+                randomList ?: emptyList(),
+                initialPrompts
+            )
+        }
+    }
     LaunchedEffect(effect) {
         effect.value?.let {
             when (it) {
@@ -142,12 +154,13 @@ fun VirtualScreen(
         }
     }
     AIMakeupScreen(
+        initialPrompts,
         navInstruction,
         state = state.value,
         uploadImage = viewModel::uploadImage,
-        onApply = viewModel::onDeleteImage,
+        onApply = navInteraction,
         inputDescription = viewModel::inputDescription,
-        launchCamera = {cameraLauncher.launch(uri)},
+        launchCamera = { cameraLauncher.launch(uri) },
         deletePicture = viewModel::onDeleteImage,
     )
     if (state.value.isLoading) {
@@ -186,12 +199,13 @@ private fun AIPreview() {
 // Too lazy for separating these components :0
 @Composable
 fun AIMakeupScreen(
+    initialPrompts: String = "",
     navInstruction: () -> Unit = {},
     state: AIScreenState = AIScreenState(),
     uploadImage: (uri: Uri) -> Unit = {},
     deletePicture: () -> Unit = {},
     inputDescription: (description: String) -> Unit = {},
-    onApply: () -> Unit = {},
+    onApply: (String) -> Unit = {},
     launchCamera: () -> Unit = {}
 ) {
 
@@ -251,111 +265,104 @@ fun AIMakeupScreen(
             }
 
             // Main content card with shadow and better rounded corners
-            Card(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight()
-                    .padding(vertical = 8.dp),
-                colors = CardDefaults.cardColors(containerColor = ColorDB7093),
-                shape = RoundedCornerShape(24.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    .padding(20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Column(
+                // Title with more appealing typography
+                Text(
+                    text = "AI Makeup - Ứng dụng tích hợp AI đưa cho bạn phong cách trang điểm phù hợp với bạn nhất",
+                    color = ColorDB7093,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    letterSpacing = 0.5.sp
+                )
+
+                // Subtitle with improved readability
+                Text(
+                    text = "Vui lòng chụp ảnh và mô tả mong muốn kiểu makeup",
+                    color = Color.Gray.copy(alpha = 0.9f),
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 8.dp, bottom = 28.dp)
+                )
+
+                // Before/After image with improved shadow and border
+                Card(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                        .clip(RoundedCornerShape(20.dp))
+                        .border(
+                            width = 2.dp,
+                            color = ColorFFC1CC,
+                            shape = RoundedCornerShape(20.dp)
+                        ),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = ColorFFE4E1
+                    )
                 ) {
-                    // Title with more appealing typography
-                    Text(
-                        text = "Glam Makeup",
-                        color = Color.White,
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Bold,
-                        textAlign = TextAlign.Center,
-                        letterSpacing = 0.5.sp
-                    )
-
-                    // Subtitle with improved readability
-                    Text(
-                        text = "Our AI will try to put on your desired makeup",
-                        color = Color.White.copy(alpha = 0.9f),
-                        fontSize = 15.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(top = 8.dp, bottom = 28.dp)
-                    )
-
-                    // Before/After image with improved shadow and border
-                    Card(
+                    Column(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(20.dp))
-                            .border(
-                                width = 2.dp,
-                                color = Color.White.copy(alpha = 0.5f),
-                                shape = RoundedCornerShape(20.dp)
-                            ),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
-                    ) {
-                        Column(
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+
+                        ) {
+                        if (state.imageURL != null) {
+                            if (state.imageURL == Uri.EMPTY) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.pick2),
+                                    contentDescription = "Before and after makeup comparison",
+                                    contentScale = ContentScale.Crop,
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .height(200.dp)
+                                )
+                            } else {
+                                Image(
+                                    painter = rememberAsyncImagePainter(state.imageURL),
+                                    contentDescription = "Captured Image",
+                                    modifier = Modifier.height(400.dp),
+                                    contentScale = ContentScale.Crop
+                                )
+                            }
+                        }
+
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(8.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-
-                            ) {
-                            if (state.imageURL != null) {
-                                if (state.imageURL == Uri.EMPTY) {
-                                    Image(
-                                        painter = painterResource(id = R.drawable.pick2),
-                                        contentDescription = "Before and after makeup comparison",
-                                        contentScale = ContentScale.Crop,
-                                        modifier = Modifier
-                                            .fillMaxSize()
-                                            .height(200.dp)
-                                    )
-                                } else {
-                                    Image(
-                                        painter = rememberAsyncImagePainter(state.imageURL),
-                                        contentDescription = "Captured Image",
-                                        modifier = Modifier.height(400.dp),
-                                        contentScale = ContentScale.Crop
-                                    )
+                                .padding(vertical = 8.dp),
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.FileUpload,
+                                contentDescription = "Play",
+                                tint = Color.DarkGray,
+                                modifier = Modifier.clickable {
+                                    uploadImage(state.imageURL ?: Uri.EMPTY)
                                 }
-                            }
-
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 8.dp),
-                                horizontalArrangement = Arrangement.SpaceEvenly,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.FileUpload,
-                                    contentDescription = "Play",
-                                    tint = Color.DarkGray,
-                                    modifier = Modifier.clickable {
-                                        uploadImage(state.imageURL ?: Uri.EMPTY)
-                                    }
-                                )
-                                Icon(
-                                    imageVector = Icons.Outlined.CameraAlt,
-                                    contentDescription = "Play",
-                                    tint = Color.DarkGray,
-                                    modifier = Modifier.clickable {
-                                        launchCamera()
-                                    }
-                                )
-                                Icon(
-                                    imageVector = Icons.Outlined.Delete,
-                                    contentDescription = "Play",
-                                    tint = Color.DarkGray,
-                                    modifier = Modifier.clickable {
-                                        deletePicture()
-                                    }
-                                )
-                            }
+                            )
+                            Icon(
+                                imageVector = Icons.Outlined.CameraAlt,
+                                contentDescription = "Play",
+                                tint = Color.DarkGray,
+                                modifier = Modifier.clickable {
+                                    launchCamera()
+                                }
+                            )
+                            Icon(
+                                imageVector = Icons.Outlined.Delete,
+                                contentDescription = "Play",
+                                tint = Color.DarkGray,
+                                modifier = Modifier.clickable {
+                                    deletePicture()
+                                }
+                            )
                         }
                     }
                 }
@@ -413,6 +420,26 @@ fun AIMakeupScreen(
                                     .height(120.dp)
                                     .padding(4.dp)
                             )
+                            Row(
+                                modifier = Modifier.padding(horizontal = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Filled.Shuffle,
+                                    contentDescription = "Shuffle",
+                                    tint = Color.DarkGray,
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .clickable {
+                                        }
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = "Ngẫu nhiên",
+                                    fontSize = 14.sp
+                                )
+
+                            }
                         }
                     }
                 }
@@ -425,7 +452,7 @@ fun AIMakeupScreen(
         }
         Button(
             onClick = {
-                onApply()
+                onApply("")
             },
             modifier = Modifier
                 .width(100.dp)

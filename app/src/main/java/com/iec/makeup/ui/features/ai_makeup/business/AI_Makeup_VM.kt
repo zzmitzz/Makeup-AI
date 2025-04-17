@@ -13,6 +13,7 @@ data class AIScreenState(
     val isLoading: Boolean = false,
     val imageURL: Uri? = null,
     val requestDescription: String? = null,
+    val randomList: List<String>? = null
 ) : Reducer.ViewState
 
 sealed class AIScreenEvent() : Reducer.ViewEvent {
@@ -23,6 +24,8 @@ sealed class AIScreenEvent() : Reducer.ViewEvent {
     data object OnSubmit : AIScreenEvent()
     data class OnLoading(val isLoading: Boolean) : AIScreenEvent()
     data class OnError(val message: String?) : AIScreenEvent()
+    data class OnInitData(val data: List<String>?, val initPrompts: String? = null) :
+        AIScreenEvent()
 }
 
 
@@ -65,6 +68,13 @@ class AIScreenReducer() : Reducer<AIScreenState, AIScreenEvent, AIScreenEffect> 
             is AIScreenEvent.OnError -> {
                 currentState to AIScreenEffect.ShowError(event.message ?: "Unknown error")
             }
+
+            is AIScreenEvent.OnInitData -> {
+                currentState.copy(
+                    randomList = event.data,
+                    requestDescription = event.initPrompts
+                ) to null
+            }
         }
     }
 
@@ -81,7 +91,6 @@ class AIScreenVM @Inject constructor() :
 
     init {
         viewModelScope.launch {
-
         }
     }
 
@@ -113,4 +122,7 @@ class AIScreenVM @Inject constructor() :
         sendEvent(AIScreenEvent.OnRequestDescription(description))
     }
 
+    fun onInitData(data: List<String>?, description: String) {
+        sendEvent(AIScreenEvent.OnInitData(data, description))
+    }
 }

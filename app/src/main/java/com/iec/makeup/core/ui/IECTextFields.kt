@@ -28,7 +28,7 @@ fun IECTextField(
         modifier = modifier.fillMaxWidth(),
         value = value,
         onValueChange = onValueChange,
-        maxLines = 1,
+        maxLines = 5,
         decorationBox = { innerTextField ->
             Row(
                 modifier = Modifier

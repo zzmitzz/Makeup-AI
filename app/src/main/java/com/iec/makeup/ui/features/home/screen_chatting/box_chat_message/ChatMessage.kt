@@ -25,10 +25,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -91,8 +90,7 @@ fun ChattingComponent(
         ) {
 
             itemsIndexed(
-                messages.reversed(),
-                key = { _, chatMessage -> chatMessage.hashCode() }) { index, chatMessage ->
+                messages.reversed()) { index, chatMessage ->
                 MessageBubble(
                     (index == 0) || (index > 0 && messages[index - 1].isFromUser),
                     chatMessage
@@ -103,7 +101,6 @@ fun ChattingComponent(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessageInput(
     messageText: String,
@@ -111,72 +108,63 @@ fun MessageInput(
     onMessageSent: (String) -> Unit,
     ableType: Boolean = true,
 ) {
-
-    Surface(
+    Row(
         modifier = Modifier
-            .background(ColorFFE4E1)
+            .padding(16.dp)
             .fillMaxWidth(),
-        tonalElevation = 2.dp
-    ) {
+        verticalAlignment = Alignment.CenterVertically,
 
-        Row(
-            modifier = Modifier
-                .background(ColorFFE4E1)
-                .padding(16.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-
-            ) {
-            Box(
-                modifier = Modifier.padding(end = 4.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    tint = Color(0xFFA9A9A9),
-                    contentDescription = "More options",
-                )
-            }
-            TextField(
-                value = messageText,
-                onValueChange = onMessageChange,
-                modifier = Modifier
-                    .weight(1f)
-                    .height(50.dp)
-                    .padding(end = 4.dp),
-                placeholder = {
-                    Text("Type a message...", color = Color.Black, fontSize = 11.sp)
-
-                },
-                colors = TextFieldDefaults.colors().copy(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
-                ),
-                shape = RoundedCornerShape(18.dp),
-                maxLines = Int.MAX_VALUE
-            )
-
-            Image(
-                imageVector = Icons.Default.Send,
-                colorFilter = if (ableType) ColorFilter.tint(Color.White) else ColorFilter.tint(
-                    Color.Black
-                ),
-                contentDescription = "Send",
-                modifier = Modifier
-                    .size(24.dp)
-                    .clickable {
-                        if (messageText.isNotBlank()) {
-                            onMessageSent(messageText)
-                        }
-                    }
+        ) {
+        Box(
+            modifier = Modifier.padding(end = 4.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                tint = Color(0xFFA9A9A9),
+                contentDescription = "More options",
             )
         }
+        TextField(
+            value = messageText,
+            onValueChange = onMessageChange,
+            modifier = Modifier
+                .weight(1f)
+                .height(50.dp)
+                .padding(end = 4.dp),
+            placeholder = {
+                Text("Bạn muốn chỉnh sửa gì?", color = Color.Black, fontSize = 11.sp)
+
+            },
+            colors = TextFieldDefaults.colors().copy(
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            shape = RoundedCornerShape(18.dp),
+            maxLines = Int.MAX_VALUE
+        )
+
+        Image(
+            imageVector = Icons.AutoMirrored.Filled.Send,
+            colorFilter = if (ableType) ColorFilter.tint(ColorDB7093) else ColorFilter.tint(
+                Color.Black
+            ),
+            contentDescription = "Send",
+            modifier = Modifier
+                .size(24.dp)
+                .clickable {
+                    if (messageText.isNotBlank()) {
+                        onMessageSent(messageText)
+                    }
+                }
+        )
     }
 }
 
 @Composable
 fun MessageBubble(
     showAvatar: Boolean,
-    message: Message
+    message: Message,
+    avatar: Int = R.drawable.account_circle_24dp_df9d9b_fill1_wght400_grad0_opsz24
 ) {
     var onShowTimeStamp by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
@@ -197,7 +185,7 @@ fun MessageBubble(
                         .alpha(if (showAvatar) 1f else 0f)
                         .background(color = Color.Transparent, shape = CircleShape)
                         .size(30.dp),
-                    painter = painterResource(R.drawable.account_circle_24dp_df9d9b_fill1_wght400_grad0_opsz24),
+                    painter = painterResource(avatar),
                     contentDescription = "Profile Picture",
                 )
             }

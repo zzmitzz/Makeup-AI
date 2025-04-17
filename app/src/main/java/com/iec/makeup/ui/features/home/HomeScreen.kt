@@ -56,17 +56,19 @@ import com.iec.makeup.ui.theme.ColorFF69B4
 fun HomeScreen(
     navToNotification: () -> Unit = {},
     navToSearch: () -> Unit = {},
-    navToAllMakeUp: () -> Unit = {},
+    navToAllMakeUpArtist: () -> Unit = {},
     navToPersonalInfo: (String) -> Unit = {},
-    navToChatting: () -> Unit = {}
+    navToChatting: () -> Unit = {},
+    navToAllTemplate: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
     AuraBeautyApp(
         navToNotification = navToNotification,
         navToSearch = navToSearch,
-        navToAllMakeUp = navToAllMakeUp,
+        navToAllMakeUp = navToAllMakeUpArtist,
         navToPersonalInfo = navToPersonalInfo,
-        navToChatting = navToChatting
+        navToChatting = navToChatting,
+        navToAllTemplate = navToAllTemplate
     )
 }
 
@@ -77,7 +79,8 @@ fun AuraBeautyApp(
     navToSearch: () -> Unit = {},
     navToAllMakeUp: () -> Unit = {},
     navToPersonalInfo: (String) -> Unit = {},
-    navToChatting: () -> Unit = {}
+    navToChatting: () -> Unit = {},
+    navToAllTemplate: (String) -> Unit = {}
 ) {
     val scrollview = rememberScrollState()
     val orderChipSelected = remember { mutableStateOf<OrderStatusType>(OrderStatusType.TO_RECEIVE) }
@@ -246,7 +249,6 @@ fun AuraBeautyApp(
                         modifier = Modifier
                             .padding(top = 12.dp, bottom = 12.dp)
                             .clickable {
-                                navToAllMakeUp()
                             }
                     )
                 }
@@ -257,7 +259,13 @@ fun AuraBeautyApp(
                     items(
                         count = mockCategory.size,
                     ){
-                        MakeUpStyleLayout(item = mockCategory[it])
+                        Box(
+                            modifier = Modifier.clickable {
+                                navToAllTemplate(it.toString())
+                            }
+                        ){
+                            MakeUpStyleLayout(item = mockCategory[it])
+                        }
                     }
                 }
                 Row(

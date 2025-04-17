@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.internal.StabilityInferred
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,19 +28,33 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.iec.makeup.core.model.ui.MakeUpTemplateLayout
 import com.iec.makeup.core.model.ui.mockMakeUpTemplateLayout
+import com.iec.makeup.core.ui.AtomicLoadingDialog
+import com.iec.makeup.ui.features.home.screen_all_makeup_template.viewmodel.ScreenAllMakeUpTemplateEffect
+import com.iec.makeup.ui.features.home.screen_all_makeup_template.viewmodel.ScreenAllMakeupTemplateVM
 import com.iec.makeup.ui.theme.ColorDB7093
 
-
 @Composable
-fun ScreenAllMakeupTemplate(
+fun ScreenAllMakeupTemplateOfCategoryStateful(
     navBack: () -> Unit = {},
+    categoryID: String = "",
     title: String = "Layout Dự tiệc",
     navToTemplateDetail: (String) -> Unit = {},
-    data: List<MakeUpTemplateLayout>
 ) {
+
+    val viewModel: ScreenAllMakeupTemplateVM = hiltViewModel()
+    val state = viewModel.state.collectAsStateWithLifecycle()
+    val effect = viewModel.effect.collectAsState(initial = null)
+
+    LaunchedEffect(key1 = effect.value) {
+        if (effect.value is ScreenAllMakeUpTemplateEffect.Error) {
+
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -60,14 +75,16 @@ fun ScreenAllMakeupTemplate(
                     ),
                 )
                 .padding(16.dp)
-        ){
+        ) {
             Icon(
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Back",
                 tint = Color.White,
-                modifier = Modifier.size(24.dp).clickable {
-                    navBack()
-                }
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable {
+                        navBack()
+                    }
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(
@@ -100,19 +117,44 @@ fun ScreenAllMakeupTemplate(
                 }
             }
         }
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+
+        ScreenAllMakeupTemplateOfCategory(
+            data = state.value.data,
+            onClick = { templateID: String -> navToTemplateDetail(templateID) }
+        )
+    }
+
+    if (state.value.isLoading) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White.copy(alpha = 0.5f)),
+            contentAlignment = Alignment.Center
         ) {
-            items(data.size) { index ->
-                PhotoCard(
-                    image = data[index].image,
-                    isFavorite = data[index].isFavorite,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth()
-                )
-            }
+            AtomicLoadingDialog()
+        }
+    }
+}
+
+
+@Composable
+fun ScreenAllMakeupTemplateOfCategory(
+    data: List<MakeUpTemplateLayout> = mockMakeUpTemplateLayout,
+    onClick: (String) -> Unit = {}
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+    ) {
+        items(data.size) { index ->
+            PhotoCard(
+                image = data[index].image,
+                isFavorite = data[index].isFavorite,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .clickable { onClick(data[index].id) }
+            )
         }
     }
 }
@@ -131,11 +173,12 @@ fun FilterButton(
     ) {
         Box(
             modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
-        ){
+        ) {
             Text(
                 text = text,
+                fontSize = 12.sp,
                 color = if (selected) Color(0xFFFF6B78) else Color.Gray,
-                fontWeight = if(selected) FontWeight.Bold else FontWeight.Normal,
+                fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
             )
         }
     }
@@ -160,30 +203,11 @@ fun PhotoCard(
             modifier = Modifier.fillMaxSize()
         )
 
-        // Favorite Icon
-        Box(
-            modifier = Modifier
-                .padding(8.dp).clip(CircleShape)
-                .background(color = Color.White)
-                .align(Alignment.TopEnd),
-            contentAlignment = Alignment.Center
-        ){
-            Icon(
-                imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                contentDescription = "Favorite",
-                tint = Color.Red,
-                modifier = Modifier
-                    .padding(2.dp)
-                    .size(24.dp)
-            )
-        }
     }
 }
 
 @Preview
 @Composable
 fun RoundedCardPreview() {
-    ScreenAllMakeupTemplate(
-        data = mockMakeUpTemplateLayout
-    )
+    ScreenAllMakeupTemplateOfCategoryStateful()
 }

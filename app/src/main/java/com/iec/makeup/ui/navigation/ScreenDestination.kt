@@ -92,14 +92,25 @@ sealed class Routes(
         fun createRoute() = "home/all_makeup"
     }
 
-    data object MainDetailMakeUp : Routes("home/detail/{${MakeUpStylistID}}") {
+    data object MainDetailMakeUp : Routes("home/detail/{${MAKE_UP_STYLIST_ID}}") {
         fun createRoute(makeupStylistID: String) = "home/detail/$makeupStylistID"
     }
 
-    data object MainChatting : Routes("home/chat/{${MakeUpStylistID}}") {
+    data object MainChatting : Routes("home/chat/{${MAKE_UP_STYLIST_ID}}") {
         fun createRoute(makeupStylistID: String) = "home/chat/$makeupStylistID"
     }
 
+    data object MainAllMakeUpTemplate :
+        Routes("home/all_makeup_template/{${MAKE_UP_CATEGORY_ID}}") {
+        fun createRoute(makeupCategoryID: String) = "home/all_makeup_template/$makeupCategoryID"
+
+    }
+
+    data object MailDetailMakeUpTemplate :
+        Routes("home/makeup_template_id/{${MAKE_UP_TEMPLATE_ID}}") {
+        fun createRoute(makeupCategoryID: String) = "home/makeup_template_id/$makeupCategoryID"
+
+    }
 
     /*
     -- Route /main/ai --
@@ -110,6 +121,14 @@ sealed class Routes(
 
     data object InstructionScreen : Routes("instruction") {
         fun createRoute() = "analyze/instruction"
+    }
+
+    data object ScreenChatWithAIRoute: Routes("chat_with_ai") {
+        fun createRoute() = "chat_with_ai"
+    }
+
+    data object ScreenInteractionRoutes: Routes("interaction") {
+        fun createRoute() = "interaction"
     }
 
 
@@ -125,6 +144,8 @@ sealed class Routes(
     }
 
     companion object {
-        val MakeUpStylistID = "makeup_stylist_id"
+        const val MAKE_UP_STYLIST_ID = "makeup_stylist_id"
+        const val MAKE_UP_CATEGORY_ID = "makeup_category_id"
+        const val MAKE_UP_TEMPLATE_ID = "makeup_template_id"
     }
 }

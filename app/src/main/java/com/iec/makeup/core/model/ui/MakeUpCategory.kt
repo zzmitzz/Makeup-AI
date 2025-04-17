@@ -15,32 +15,22 @@ fun fakeMakeUpLayoutData(): List<MakeUpLayout> {
         MakeUpLayout(
             id = "1",
             title = "Portrait",
-            image = "https://images.unsplash.com/photo-153452874"
+            image = "https://cdn.motiondesign.school/uploads/2021/06/GIF_Header.gif"
         ),
         MakeUpLayout(
             id = "2",
             title = "Landscape",
-            image = "https://images.unsplash.com/photo-153452874"
+            image = "https://cdn.motiondesign.school/uploads/2021/06/GIF_Header.gif"
         ),
         MakeUpLayout(
             id = "3",
             title = "Wedding",
-            image = "https://images.unsplash.com/photo-153452874"
+            image = "https://lfactorcosmetics.com/cdn/shop/articles/Essential_makeup_products.jpg?v=1701681592"
         ),
         MakeUpLayout(
             id = "4",
             title = "Wedding",
-            image = "https://images.unsplash.com/photo-153452874"
+            image = "https://lfactorcosmetics.com/cdn/shop/articles/Essential_makeup_products.jpg?v=1701681592"
         ),
-        MakeUpLayout(
-            id = "5",
-            title = "Wedding",
-            image = "https://images.unsplash.com/photo-153452874"
-        ),
-        MakeUpLayout(
-            id = "6",
-            title = "Wedding",
-            image = "https://images.unsplash.com/photo-153452874"
-        )
     )
 }

@@ -11,16 +11,32 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
 import com.example.iec.ui.feature.main.message.box_chat_message.ModernChatScreen
+import com.iec.makeup.core.model.ui.MakeUpTemplateLayout
+import com.iec.makeup.core.model.ui.mockMakeUpTemplateLayout
 import com.iec.makeup.ui.MakeupAppState
 import com.iec.makeup.ui.features.ai_makeup.InstructionScreen
 import com.iec.makeup.ui.features.ai_makeup.VirtualScreen
+import com.iec.makeup.ui.features.ai_makeup.screen_chat_with_ai.ScreenChatWithAI
+import com.iec.makeup.ui.features.ai_makeup.screen_response_ai.InteractionScreen
+import com.iec.makeup.ui.features.ai_makeup.screen_response_ai.InteractionScreenStateful
 import com.iec.makeup.ui.features.authentication.login.LoginScreen
 import com.iec.makeup.ui.features.authentication.register.RegisterScreen
 import com.iec.makeup.ui.features.home.HomeScreen
 import com.iec.makeup.ui.features.home.screen_notification.NotificationContent
 import com.iec.makeup.ui.features.home.screen_search.SearchScreen
 import com.iec.makeup.ui.features.home.screen_all_makeup.AllMakeUpScreen
+import com.iec.makeup.ui.features.home.screen_all_makeup_template.ScreenAllMakeupTemplateOfCategoryStateful
+import com.iec.makeup.ui.features.home.screen_detail_template_layout.ScreenDetailTemplateLayout
+import com.iec.makeup.ui.features.home.screen_detail_template_layout.ScreenDetailTemplateLayoutStateful
 import com.iec.makeup.ui.features.home.screen_makeup_info.ProfileScreen
+import com.iec.makeup.ui.navigation.NavigationArguments.ARG_INITIAL_PROMPT
+
+
+object NavigationArguments {
+    const val ARG_INITIAL_PROMPT = "initialPrompt"
+}
+
+const val ARG_INITIAL_LIST_PROMPT = "initialListPrompt"
 
 
 @Composable
@@ -99,7 +115,7 @@ fun NavigationGraph(
                             restoreState = false
                         }
                     },
-                    navToAllMakeUp = {
+                    navToAllMakeUpArtist = {
                         navController.navigate(Routes.MainAllMakeUp.createRoute()) {
                             launchSingleTop = true
                             restoreState = false
@@ -113,6 +129,12 @@ fun NavigationGraph(
                     },
                     navToChatting = {
                         navController.navigate(Routes.MainChatting.createRoute("0")) {
+                            launchSingleTop = true
+                            restoreState = false
+                        }
+                    },
+                    navToAllTemplate = {
+                        navController.navigate(Routes.MainAllMakeUpTemplate.createRoute(it)) {
                             launchSingleTop = true
                             restoreState = false
                         }
@@ -182,10 +204,10 @@ fun NavigationGraph(
             composable(
                 route = Routes.MainDetailMakeUp.route,
                 arguments = listOf(
-                    navArgument(Routes.MakeUpStylistID) { type = NavType.StringType }
+                    navArgument(Routes.MAKE_UP_STYLIST_ID) { type = NavType.StringType }
                 )
             ) {
-                val idMakeUp = it.arguments?.getString(Routes.MakeUpStylistID) ?: "0"
+                val idMakeUp = it.arguments?.getString(Routes.MAKE_UP_STYLIST_ID) ?: "0"
                 ProfileScreen(
                     id = idMakeUp,
                     navBack = { navController.popBackStack() }
@@ -195,14 +217,52 @@ fun NavigationGraph(
             composable(
                 route = Routes.MainChatting.route,
                 arguments = listOf(
-                    navArgument(Routes.MakeUpStylistID) { type = NavType.StringType }
+                    navArgument(Routes.MAKE_UP_STYLIST_ID) { type = NavType.StringType }
                 )
             ) {
                 appState.setVisibleBottomNav(false)
-                val idMakeUp = it.arguments?.getString(Routes.MakeUpStylistID) ?: "0"
+                val idMakeUp = it.arguments?.getString(Routes.MAKE_UP_STYLIST_ID) ?: "0"
                 ModernChatScreen(
                     userName = idMakeUp,
                     onBackPress = { navController.popBackStack() }
+                )
+            }
+
+            composable(
+                route = Routes.MainAllMakeUpTemplate.route,
+                arguments = listOf(
+                    navArgument(Routes.MAKE_UP_CATEGORY_ID) { type = NavType.StringType }
+                )
+            ) {
+                appState.setVisibleBottomNav(true)
+                val idCategory = it.arguments?.getString(Routes.MAKE_UP_CATEGORY_ID) ?: "0"
+                ScreenAllMakeupTemplateOfCategoryStateful(
+                    navBack = {
+                        navController.popBackStack()
+                    },
+                    categoryID = idCategory,
+                    navToTemplateDetail = { id ->
+                        navController.navigate(Routes.MailDetailMakeUpTemplate.createRoute(id))
+                    }
+                )
+            }
+            composable(
+                route = Routes.MailDetailMakeUpTemplate.route,
+                arguments = listOf(
+                    navArgument(Routes.MAKE_UP_TEMPLATE_ID) { type = NavType.StringType }
+                )
+            ) {
+                appState.setVisibleBottomNav(true)
+                val idCategory = it.arguments?.getString(Routes.MAKE_UP_TEMPLATE_ID) ?: "0"
+                // Pass id then query by this id, not pass the Item
+                ScreenDetailTemplateLayoutStateful(
+                    item = mockMakeUpTemplateLayout[0],
+                    onApplyTemplate = {
+                        navController.navigate(Routes.Page2.createRoute())
+                    },
+                    onClose = {
+                        navController.popBackStack()
+                    }
                 )
             }
 
@@ -212,13 +272,27 @@ fun NavigationGraph(
 
             navigation(
                 startDestination = Routes.Page2.createRoute(),
-                route = "ai"
+                route = "ai",
+                arguments = listOf(
+                    navArgument(ARG_INITIAL_PROMPT) { type = NavType.StringType },
+                    navArgument(ARG_INITIAL_LIST_PROMPT) {
+                        type = NavType.StringListType
+                    }
+                )
             ) {
                 composable(route = Routes.Page2.createRoute()) {
                     appState.setVisibleBottomNav(true)
+                    val initialPrompt: String = it.arguments?.getString(ARG_INITIAL_PROMPT) ?: ""
+                    val initialListPrompt: List<String>? =
+                        it.arguments?.getStringArrayList(ARG_INITIAL_LIST_PROMPT)
                     VirtualScreen(
+                        initialPrompts = initialPrompt,
+                        randomList = initialListPrompt,
                         navBack = { navController.popBackStack() },
-                        navInstruction = { navController.navigate(Routes.InstructionScreen.createRoute()) }
+                        navInstruction = { navController.navigate(Routes.InstructionScreen.createRoute()) },
+                        navInteraction = {
+                            navController.navigate(Routes.ScreenInteractionRoutes.route)
+                        }
                     )
                 }
 
@@ -228,13 +302,28 @@ fun NavigationGraph(
                         navBack = { navController.popBackStack() },
                         navLaunchScreen = {
                             navController.navigate(Routes.Page2.createRoute()) {
-                                popUpTo("ai") {
-                                    inclusive = false
-                                }
                                 launchSingleTop = true
                                 restoreState = false
                             }
                         }
+                    )
+                }
+
+                composable(route = Routes.ScreenInteractionRoutes.route) {
+                    appState.setVisibleBottomNav(true)
+                    InteractionScreenStateful(
+                        navBack = { navController.popBackStack() },
+                        navToEditScreen = {
+                            navController.navigate(Routes.ScreenChatWithAIRoute.createRoute()) {
+                            }
+                        }
+                    )
+                }
+
+                composable(route = Routes.ScreenChatWithAIRoute.route) {
+                    appState.setVisibleBottomNav(true)
+                    ScreenChatWithAI(
+                        navBack = { navController.popBackStack() }
                     )
                 }
 
@@ -259,4 +348,5 @@ fun NavigationGraph(
             }
         }
     }
+
 }
