@@ -150,74 +150,74 @@ fun AuraBeautyApp(
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Booking",
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(bottom = 12.dp)
-                )
-
-                // Order Status Chips
-                OrderStatusChips(
-                    viewToPay = {
-                        orderChipSelected.value = OrderStatusType.TO_PAY
-                    },
-                    viewToReceive = {
-                        orderChipSelected.value = OrderStatusType.TO_RECEIVE
-                    },
-                    viewToReview = {
-                        orderChipSelected.value = OrderStatusType.TO_REVIEW
-                    },
-                    currentSelected = orderChipSelected.value
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.elevatedCardElevation(0.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = ColorDB7093
-                    )
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        when (orderChipSelected.value) {
-                            OrderStatusType.TO_PAY -> {
-                                Text(
-                                    text = "You have 1 order to pay",
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.White,
-                                    fontSize = 12.sp,
-                                    modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
-                                )
-                            }
-
-                            OrderStatusType.TO_RECEIVE -> {
-                                Text(
-                                    text = "You have 1 book to receive",
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.White,
-                                    fontSize = 12.sp,
-                                    modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
-                                )
-                            }
-
-                            OrderStatusType.TO_REVIEW -> {
-                                Text(
-                                    text = "You have 1 order to review",
-                                    fontWeight = FontWeight.Bold,
-                                    color = Color.White,
-                                    fontSize = 12.sp,
-                                    modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
-                                )
-                            }
-                        }
-                    }
-                }
+//                Text(
+//                    text = "Booking",
+//                    fontWeight = FontWeight.Medium,
+//                    fontSize = 18.sp,
+//                    modifier = Modifier.padding(bottom = 12.dp)
+//                )
+//
+//                // Order Status Chips
+//                OrderStatusChips(
+//                    viewToPay = {
+//                        orderChipSelected.value = OrderStatusType.TO_PAY
+//                    },
+//                    viewToReceive = {
+//                        orderChipSelected.value = OrderStatusType.TO_RECEIVE
+//                    },
+//                    viewToReview = {
+//                        orderChipSelected.value = OrderStatusType.TO_REVIEW
+//                    },
+//                    currentSelected = orderChipSelected.value
+//                )
+//                Spacer(modifier = Modifier.height(8.dp))
+//                Card(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .wrapContentHeight(),
+//                    shape = RoundedCornerShape(16.dp),
+//                    elevation = CardDefaults.elevatedCardElevation(0.dp),
+//                    colors = CardDefaults.cardColors(
+//                        containerColor = ColorDB7093
+//                    )
+//                ) {
+//                    Box(
+//                        modifier = Modifier.fillMaxSize(),
+//                        contentAlignment = Alignment.Center
+//                    ) {
+//                        when (orderChipSelected.value) {
+//                            OrderStatusType.TO_PAY -> {
+//                                Text(
+//                                    text = "You have 1 order to pay",
+//                                    fontWeight = FontWeight.Bold,
+//                                    color = Color.White,
+//                                    fontSize = 12.sp,
+//                                    modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+//                                )
+//                            }
+//
+//                            OrderStatusType.TO_RECEIVE -> {
+//                                Text(
+//                                    text = "You have 1 book to receive",
+//                                    fontWeight = FontWeight.Bold,
+//                                    color = Color.White,
+//                                    fontSize = 12.sp,
+//                                    modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+//                                )
+//                            }
+//
+//                            OrderStatusType.TO_REVIEW -> {
+//                                Text(
+//                                    text = "You have 1 order to review",
+//                                    fontWeight = FontWeight.Bold,
+//                                    color = Color.White,
+//                                    fontSize = 12.sp,
+//                                    modifier = Modifier.padding(top = 12.dp, bottom = 12.dp)
+//                                )
+//                            }
+//                        }
+//                    }
+//                }
 //                Row(
 //                    modifier = Modifier.fillMaxWidth(),
 //                    horizontalArrangement = Arrangement.SpaceBetween,

@@ -110,7 +110,7 @@ fun MessageInput(
 ) {
     Row(
         modifier = Modifier
-            .padding(16.dp)
+            .padding(horizontal = 8.dp, vertical = 8.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
 
@@ -118,10 +118,10 @@ fun MessageInput(
         Box(
             modifier = Modifier.padding(end = 4.dp)
         ) {
-            Icon(
-                imageVector = Icons.Default.MoreVert,
-                tint = Color(0xFFA9A9A9),
-                contentDescription = "More options",
+            Image(
+                modifier = Modifier.size(24.dp),
+                painter = painterResource(R.drawable.ai_technology),
+                contentDescription = ""
             )
         }
         TextField(
@@ -132,7 +132,7 @@ fun MessageInput(
                 .height(50.dp)
                 .padding(end = 4.dp),
             placeholder = {
-                Text("Bạn muốn chỉnh sửa gì?", color = Color.Black, fontSize = 11.sp)
+                Text("Bạn muốn chỉnh sửa gì?", color = Color.DarkGray, fontSize = 12.sp)
 
             },
             colors = TextFieldDefaults.colors().copy(
@@ -178,17 +178,17 @@ fun MessageBubble(
         Row(
             verticalAlignment = Alignment.Bottom
         ) {
-            if (!message.isFromUser) {
-                Image(
-                    modifier = Modifier
-                        .padding(end = 6.dp)
-                        .alpha(if (showAvatar) 1f else 0f)
-                        .background(color = Color.Transparent, shape = CircleShape)
-                        .size(30.dp),
-                    painter = painterResource(avatar),
-                    contentDescription = "Profile Picture",
-                )
-            }
+//            if (!message.isFromUser) {
+//                Image(
+//                    modifier = Modifier
+//                        .padding(end = 6.dp)
+//                        .alpha(if (showAvatar) 1f else 0f)
+//                        .background(color = Color.Transparent, shape = CircleShape)
+//                        .size(30.dp),
+//                    painter = painterResource(avatar),
+//                    contentDescription = "Profile Picture",
+//                )
+//            }
             Surface(
                 modifier = Modifier,
                 shape = RoundedCornerShape(
@@ -211,17 +211,17 @@ fun MessageBubble(
                         }
 
                 ) {
-
                     Text(
                         modifier = Modifier.wrapContentWidth(),
                         text = message.message,
+                        fontSize = 12.sp,
                         color = ColorFFE4E1
 
                     )
                     if (onShowTimeStamp) {
                         Text(
                             text = convertTimeStamp(System.currentTimeMillis() - message.timestamp),
-                            fontSize = 12.sp,
+                            fontSize = 10.sp,
                             color = if (message.isFromUser)
                                 MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.7f)
                             else

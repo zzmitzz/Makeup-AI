@@ -48,6 +48,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.iec.makeup.R
 import com.iec.makeup.core.model.Message
 import com.iec.makeup.ui.features.ai_makeup.screen_response_ai.FeatureSelectorRow
@@ -88,11 +89,12 @@ fun ScreenChatWithAI(
                     }
             )
             Box(
-                modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp)
+                modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
             ) {
                 Card(
                     modifier = Modifier
-                        .aspectRatio(1f)
+                        .fillMaxWidth()
+                        .height(300.dp)
                         .padding(
                             horizontal = 12.dp
                         )
@@ -131,35 +133,52 @@ fun ScreenChatWithAI(
                 }
             }
 
-            Column(
+            ConstraintLayout(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                ChatWithAIComponents(
-                    messages = listOf(
-                        Message(isFromUser = true, message = "Hello", timestamp = 0),
-                        Message(isFromUser = false, message = "Hello", timestamp = 0),
-                        Message(isFromUser = true, message = "Hello", timestamp = 0),
-                        Message(isFromUser = false, message = "Hello", timestamp = 0),
-                        Message(isFromUser = true, message = "Hello", timestamp = 0),
-                        Message(isFromUser = false, message = "Hello", timestamp = 0),
-                        Message(isFromUser = true, message = "Hello", timestamp = 0),
-                        Message(isFromUser = false, message = "Hello", timestamp = 0),Message(isFromUser = true, message = "Hello", timestamp = 0),
-                        Message(isFromUser = false, message = "Hello", timestamp = 0),
-                        Message(isFromUser = true, message = "Hello", timestamp = 0),
-                        Message(isFromUser = false, message = "Hello", timestamp = 0),
-                        Message(isFromUser = true, message = "Hello", timestamp = 0),
-                        Message(isFromUser = false, message = "Hello", timestamp = 0),
-                        Message(isFromUser = true, message = "Hello", timestamp = 0),
-                        Message(isFromUser = false, message = "Hello", timestamp = 0),
-                    )
-                )
-                MessageInput(
-                    messageText = "",
-                    onMessageChange = {},
-                    onMessageSent = {}
 
-                )
+            ) {
+                val (chatting, input) = createRefs()
+                Box(
+                    modifier = Modifier.padding(horizontal = 16.dp).constrainAs(chatting){
+                        bottom.linkTo(input.top)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                ){
+                    ChatWithAIComponents(
+                        messages = listOf(
+                            Message(isFromUser = true, message = "Hello", timestamp = 0),
+                            Message(isFromUser = false, message = "Hello", timestamp = 0),
+                            Message(isFromUser = true, message = "Hello", timestamp = 0),
+                            Message(isFromUser = false, message = "Hello", timestamp = 0),
+                            Message(isFromUser = true, message = "Hello", timestamp = 0),
+                            Message(isFromUser = false, message = "Hello", timestamp = 0),
+                            Message(isFromUser = true, message = "Hello", timestamp = 0),
+                            Message(isFromUser = false, message = "Hello", timestamp = 0),Message(isFromUser = true, message = "Hello", timestamp = 0),
+                            Message(isFromUser = false, message = "Hello", timestamp = 0),
+                            Message(isFromUser = true, message = "Hello", timestamp = 0),
+                            Message(isFromUser = false, message = "Hello", timestamp = 0),
+                            Message(isFromUser = true, message = "Hello", timestamp = 0),
+                            Message(isFromUser = false, message = "Hello", timestamp = 0),
+                            Message(isFromUser = true, message = "Hello", timestamp = 0),
+                            Message(isFromUser = false, message = "Hello", timestamp = 0),
+                        )
+                    )
+                }
+                Box(
+                    modifier = Modifier.constrainAs(input){
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(parent.end)
+                    }
+                ){
+                    MessageInput(
+                        messageText = "",
+                        onMessageChange = {},
+                        onMessageSent = {}
+
+                    )
+                }
             }
         }
     }
@@ -201,7 +220,7 @@ fun ChatWithAIComponents(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(250.dp)
+            .height(320.dp)
             .padding(
                 horizontal = 8.dp,
                 vertical = 8.dp

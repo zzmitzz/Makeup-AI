@@ -338,7 +338,7 @@ fun NavigationGraph(
                 }
 
                 composable(route = Routes.ScreenInteractionRoutes.route) {
-                    appState.setVisibleBottomNav(true)
+                    appState.setVisibleBottomNav(false)
                     InteractionScreenStateful(
                         navBack = { navController.popBackStack() },
                         navToEditScreen = {
@@ -349,7 +349,7 @@ fun NavigationGraph(
                 }
 
                 composable(route = Routes.ScreenChatWithAIRoute.route) {
-                    appState.setVisibleBottomNav(true)
+                    appState.setVisibleBottomNav(false)
                     ScreenChatWithAI(
                         navBack = { navController.popBackStack() }
                     )
