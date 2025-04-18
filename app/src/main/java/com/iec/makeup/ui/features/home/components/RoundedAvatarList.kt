@@ -78,7 +78,7 @@ fun UserStoryAvatar(
                     .data("https://yt3.googleusercontent.com/taR8GgX9B2d6YGDpNe27NBXrsTQkG2KGYwnzILYJFHdCBxeP-TnJBBpiAzDQ9-jC1AR7qteQ=s900-c-k-c0x00ffffff-no-rj")
                     .crossfade(true)
                     .build(),
-                contentDescription = "${user.username}'s profile picture",
+                contentDescription = "${user.name}'s profile picture",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(imageSize)
@@ -89,7 +89,7 @@ fun UserStoryAvatar(
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = user.username,
+            text = user.name ?: "",
             style = MaterialTheme.typography.labelSmall,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -112,7 +112,7 @@ fun FollowerStoryList(
         contentPadding = PaddingValues(horizontal = 12.dp), // Padding at the start/end of the list
         horizontalArrangement = Arrangement.spacedBy(12.dp) // Spacing between avatars
     ) {
-        items(users, key = { it.id }) { user ->
+        items(users) { user ->
             UserStoryAvatar(user = user)
         }
     }
@@ -123,9 +123,9 @@ fun FollowerStoryList(
 @Composable
 fun FollowerStoryListPreview() {
     val sampleUsers = listOf(
-        User(1, "user1", "zzmitzz"),
-        User(2, "user2", "zxmitzz"),
-        User(3, "user3", "Lmao")
+        User("", "user1", "zzmitzz"),
+        User("", "user2", "zxmitzz"),
+        User("", "user3", "Lmao")
     )
     FollowerStoryList(users = sampleUsers)
 }

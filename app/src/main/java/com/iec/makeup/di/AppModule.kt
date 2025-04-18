@@ -4,9 +4,12 @@ import android.graphics.Insets.add
 import com.iec.makeup.core.DataStoreInterface
 import com.iec.makeup.core.PersistentState
 import com.iec.makeup.core.PreferenceKeys
+import com.iec.makeup.core.network.AuthInterceptorWithToken
+import com.iec.makeup.core.network.TokenManager
 import com.iec.makeup.core.utils.Constants.BASE_URL
 import com.iec.makeup.core.utils.Constants.TIME_OUT
 import com.iec.makeup.data.remote.api.AuthEndpoint
+import com.iec.makeup.data.remote.api.UserEndpoint
 import com.iec.makeup.data.remote.repository.MessageChatRemoteImpl
 import com.iec.makeup.data.repository.AuthRepository
 import com.iec.makeup.data.repository.AuthRepositoryImpl
@@ -27,6 +30,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.time.Duration
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 
@@ -34,10 +38,19 @@ import javax.inject.Singleton
 @Module
 class AppModule {
 
+    // Network Module
+
+
+    @Provides
+    fun provideAuthInterceptor(
+        tokenManager: TokenManager
+    ): AuthInterceptorWithToken = AuthInterceptorWithToken(tokenManager)
+
+
     @Provides
     @Singleton
-    fun provideRetrofit(dataStore: DataStoreInterface): Retrofit {
-        var token: String? = null
+    @Named("NoAuth")
+    fun provideRetrofit(): Retrofit {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
@@ -45,7 +58,6 @@ class AppModule {
         val authInterceptor = Interceptor { chain ->
             val request = chain.request().newBuilder()
                 .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer $token")
                 .build()
             chain.proceed(request)
         }
@@ -65,9 +77,38 @@ class AppModule {
     }
 
     @Provides
+    @Named("Auth")
+    fun provideAuthRetrofitWithToken(
+        authInterceptor: AuthInterceptorWithToken
+    ): Retrofit {
+
+        val loggingInterceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor)
+            .connectTimeout(TIME_OUT, TimeUnit.MILLISECONDS)
+            .build()
+
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+
+    @Provides
     @Singleton
-    fun provideAuthEndpoint(retrofit: Retrofit): AuthEndpoint =
+    fun provideAuthEndpoint(@Named("NoAuth") retrofit: Retrofit): AuthEndpoint =
         retrofit.create(AuthEndpoint::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserEndpoint(@Named("Auth") retrofit: Retrofit): UserEndpoint =
+        retrofit.create(UserEndpoint::class.java)
+
 }
 
 @InstallIn(SingletonComponent::class)

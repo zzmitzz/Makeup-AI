@@ -17,8 +17,9 @@ data class LoginRequest(
 
 
 interface AuthEndpoint {
-    @POST("auth/login")
+    @POST("authLocal/login")
     suspend fun login(
         @Body loginRequest: LoginRequest
     ): Response<APIResult<LoginDTO?>>
+
 }

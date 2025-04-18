@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.iec.makeup.R
 import com.iec.makeup.core.utils.DateTimeUtils
 import com.iec.makeup.core.utils.DateTimeUtils.isMorning
@@ -40,14 +41,20 @@ import com.iec.makeup.core.utils.DateTimeUtils.isMorning
 @Preview
 @Composable
 private fun TopPreview() {
-    TopAppBar()
+    TopAppBar(
+        showSearch = {},
+        showNotifications = {},
+        showChat = {},
+        image = ""
+    )
 }
 
 @Composable
 fun TopAppBar(
     showSearch: () -> Unit = {},
     showNotifications: () -> Unit = {},
-    showChat: () -> Unit = {}
+    showChat: () -> Unit = {},
+    image: String
 ) {
     Row(
         modifier = Modifier
@@ -67,8 +74,8 @@ fun TopAppBar(
                 shape = CircleShape,
                 elevation = CardDefaults.elevatedCardElevation(0.dp),
             ) {
-                Image(
-                    painter = painterResource(R.drawable.funny_jake_adventure_time_cute_yellow_desktop_wallpaper_4k),
+                AsyncImage(
+                    model = image,
                     contentDescription = "Logo",
                     contentScale = ContentScale.FillHeight
                     )

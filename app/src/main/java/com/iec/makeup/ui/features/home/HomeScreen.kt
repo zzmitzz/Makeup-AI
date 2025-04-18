@@ -32,6 +32,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.iec.makeup.core.model.User
 import com.iec.makeup.core.model.ui.fakeMakeUpLayoutData
 import com.iec.makeup.core.model.ui.mockListData
@@ -62,13 +64,19 @@ fun HomeScreen(
     navToAllTemplate: (String) -> Unit = {}
 ) {
     val context = LocalContext.current
+    val viewModel: HomeScreenVM = hiltViewModel()
+    val state = viewModel.state.collectAsStateWithLifecycle()
+    val effect = viewModel.effect.collectAsStateWithLifecycle(initialValue = null)
+
     AuraBeautyApp(
         navToNotification = navToNotification,
         navToSearch = navToSearch,
         navToAllMakeUp = navToAllMakeUpArtist,
         navToPersonalInfo = navToPersonalInfo,
         navToChatting = navToChatting,
-        navToAllTemplate = navToAllTemplate
+        navToAllTemplate = navToAllTemplate,
+        state = state.value
+
     )
 }
 
@@ -80,7 +88,8 @@ fun AuraBeautyApp(
     navToAllMakeUp: () -> Unit = {},
     navToPersonalInfo: (String) -> Unit = {},
     navToChatting: () -> Unit = {},
-    navToAllTemplate: (String) -> Unit = {}
+    navToAllTemplate: (String) -> Unit = {},
+    state: HomeScreenState = HomeScreenState()
 ) {
     val scrollview = rememberScrollState()
     val orderChipSelected = remember { mutableStateOf<OrderStatusType>(OrderStatusType.TO_RECEIVE) }
@@ -112,7 +121,8 @@ fun AuraBeautyApp(
             TopAppBar(
                 showNotifications = navToNotification,
                 showChat = navToChatting,
-                showSearch = navToSearch
+                showSearch = navToSearch,
+                image = state.userProfile?.avatar ?: "https://blog.maika.ai/wp-content/uploads/2024/02/anh-meo-meme-2.jpg"
             )
             // Content
             Column(
@@ -133,9 +143,9 @@ fun AuraBeautyApp(
                 Row(modifier = Modifier.fillMaxWidth()) {
                     FollowerStoryList(
                         users = listOf(
-                            User(1, "user1", "zzmitzz"),
-                            User(2, "user2", "zxmitzz"),
-                            User(3, "user3", "Lmao")
+                            User("1", "user1", "zzmitzz"),
+                            User("2", "user2", "zxmitzz"),
+                            User("2", "user3", "Lmao")
                         )
                     )
                 }
@@ -258,12 +268,12 @@ fun AuraBeautyApp(
                 LazyRow {
                     items(
                         count = mockCategory.size,
-                    ){
+                    ) {
                         Box(
                             modifier = Modifier.clickable {
                                 navToAllTemplate(it.toString())
                             }
-                        ){
+                        ) {
                             MakeUpStyleLayout(item = mockCategory[it])
                         }
                     }
